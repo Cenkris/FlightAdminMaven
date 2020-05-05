@@ -11,13 +11,14 @@ public class UserDAO {
 
     private Connection connection;
     private PreparedStatement insertQuery;
-    private PreparedStatement selectQuery;
+    private PreparedStatement selectUserByNameQuery, selectUserByEmailQuery;
 
     public UserDAO(Connection connection) {
         this.connection = connection;
         try {
-            insertQuery = connection.prepareStatement("INSERT INTO users VALUES (null, ?, ?)");
-            selectQuery = connection.prepareStatement("SELECT * FROM users WHERE username = ?");
+            insertQuery = connection.prepareStatement("INSERT INTO users VALUES (null, ?, ?, ?)");
+            selectUserByNameQuery = connection.prepareStatement("SELECT * FROM users WHERE username = ?");
+            selectUserByEmailQuery = connection.prepareStatement("SELECT * FROM users WHERE email = ?");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -27,6 +28,7 @@ public class UserDAO {
         try {
             insertQuery.setString(1, user.getUsername());
             insertQuery.setString(2, user.getPassword());
+            insertQuery.setString(3, user.getEmail());
             return insertQuery.executeUpdate() != 0;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -34,13 +36,32 @@ public class UserDAO {
         return false;
     }
 
-    public User selectUser(String name) {
+    public User selectUserByName(String name) {
         User user = new User();
         try {
-            selectQuery.setString(1, name);
-            ResultSet result = selectQuery.executeQuery();
-            user.setUsername(result.getString("username"));
-            user.setPassword(result.getString("password"));
+            selectUserByNameQuery.setString(1, name);
+            ResultSet result = selectUserByNameQuery.executeQuery();
+            if (result.next()) {
+                user.setUsername(result.getString("username"));
+                user.setPassword(result.getString("password"));
+                user.setEmail(result.getString("email"));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return user;
+    }
+
+    public User selectUserByEmail(String email) {
+        User user = new User();
+        try {
+            selectUserByEmailQuery.setString(1, email);
+            ResultSet result = selectUserByEmailQuery.executeQuery();
+            if (result.next()) {
+                user.setUsername(result.getString("username"));
+                user.setPassword(result.getString("password"));
+                user.setEmail(result.getString("email"));
+            }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

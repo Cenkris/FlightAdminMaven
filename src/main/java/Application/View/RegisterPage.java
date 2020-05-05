@@ -1,10 +1,16 @@
 package Application.View;
 
+import Application.Controller.UserController;
+import Application.Model.User;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.concurrent.Flow;
+import java.util.Arrays;
 
 public class RegisterPage extends JFrame {
+    private final UserController userController = new UserController();
+
+    //swing components
     private JPanel usernamePanel, passwordPanel, confirmPasswordPanel, emailPanel, registerButtonPanel;
     private JLabel usernameLabel, passwordLabel, confirmaPasswordLabel, emailLabel, helpMessage;
     private JTextField usernameTextField, emailTextField;
@@ -26,15 +32,83 @@ public class RegisterPage extends JFrame {
         registerButtonPanel = new JPanel(new FlowLayout());
         registerButton = new JButton("Register");
 
-        registerButton.addActionListener(event -> {
-            LoginPage loginPage = new LoginPage();
-            loginPage.setVisible(true);
-            dispose();
-        });
+        registerButton.addActionListener(event -> register());
 
         //add components
         registerButtonPanel.add(registerButton);
         add(registerButtonPanel);
+    }
+
+    private void register() {
+        String username = usernameTextField.getText();
+        String password = new String(passwordTextField.getPassword());
+        String email = emailTextField.getText();
+
+        if (allFieldsValid()) {
+            User user = new User(username, password, email);
+            userController.insertUser(user);
+            LoginPage loginPage = new LoginPage();
+            loginPage.setVisible(true);
+            dispose();
+        } else {
+            if (someFieldsAreEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please fill all the fields");
+            } else if (!userController.isNewUser(usernameTextField.getText())) {
+                JOptionPane.showMessageDialog(null, "Username already exists");
+                usernameTextField.requestFocus();
+            } else if (!isValidPassword()) {
+                JOptionPane.showMessageDialog(null, "For security reasons password must be: \n" +
+                        "\t - minimum 6 characters; \n" +
+                        "\t - at least a capital letter; \n" +
+                        "\t - at least a non-capital letter \n" +
+                        "\t - at leas one digit;");
+                passwordTextField.requestFocus();
+            } else if (!arePasswordsMatch()) {
+                JOptionPane.showMessageDialog(null, "Passwords must match");
+                confirmPasswordField.requestFocus();
+            } else if (!isEmailPatternValid()) {
+                JOptionPane.showMessageDialog(null, "Please input a valid email address");
+                emailTextField.requestFocus();
+            } else if (!userController.isNewEmail(emailTextField.getText())) {
+                JOptionPane.showMessageDialog(null, "Email already exists!");
+                emailTextField.requestFocus();
+            }
+        }
+    }
+
+    private boolean allFieldsValid() {
+        return isValidPassword() &&
+                arePasswordsMatch() &&
+                userController.isNewUser(usernameTextField.getText()) &&
+                !someFieldsAreEmpty() &&
+                isValidEmail();
+    }
+
+    private boolean isValidPassword() {
+        String password = new String(passwordTextField.getPassword());
+        return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{6,}$");
+    }
+
+    private boolean isEmailPatternValid() {
+        String email = emailTextField.getText();
+        return email.matches("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{1,3}$");
+    }
+
+    private boolean isValidEmail() {
+        return isEmailPatternValid() && userController.isNewEmail(emailTextField.getText());
+    }
+
+    private boolean someFieldsAreEmpty() {
+        return usernameTextField.getText().isEmpty() ||
+                new String(passwordTextField.getPassword()).isEmpty() ||
+                new String(confirmPasswordField.getPassword()).isEmpty() ||
+                emailTextField.getText().isEmpty();
+    }
+
+    private boolean arePasswordsMatch() {
+        char[] password = passwordTextField.getPassword();
+        char[] confirmedPassword = confirmPasswordField.getPassword();
+        return Arrays.equals(password, confirmedPassword);
     }
 
     private void initHelpMessage() {

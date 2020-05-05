@@ -7,7 +7,9 @@ import lombok.*;
 @Setter
 @ToString
 @NoArgsConstructor
+
 public class User {
-    String username;
-    String password;
+    private String username;
+    private String password;
+    private String email;
 }
