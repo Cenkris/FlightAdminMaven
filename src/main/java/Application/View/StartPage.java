@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class StartPage extends JFrame {
     private JButton loginButton, registerButton;
-    private final Dimension buttonsDimension = new Dimension(120,50);
+    private final Dimension BUTTON_DIMENSION = new Dimension(120,50);
 
     public StartPage(){
         initLoginButton();
@@ -15,7 +15,7 @@ public class StartPage extends JFrame {
 
     private void initLoginButton() {
         loginButton = new JButton("Login");
-        loginButton.setPreferredSize(buttonsDimension);
+        loginButton.setPreferredSize(BUTTON_DIMENSION);
         loginButton.addActionListener(event -> {
             LoginPage loginPage = new LoginPage();
             loginPage.setVisible(true);
@@ -26,7 +26,7 @@ public class StartPage extends JFrame {
 
     private void initRegisterButton() {
         registerButton = new JButton("Register");
-        registerButton.setPreferredSize(buttonsDimension);
+        registerButton.setPreferredSize(BUTTON_DIMENSION);
         registerButton.addActionListener(event -> {
             RegisterPage registerPage = new RegisterPage();
             registerPage.setVisible(true);
