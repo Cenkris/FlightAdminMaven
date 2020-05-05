@@ -13,21 +13,31 @@ public class StartPage extends JFrame {
         initDefaultValues();
     }
 
-    private void initRegisterButton() {
+    private void initLoginButton() {
         loginButton = new JButton("Login");
         loginButton.setPreferredSize(buttonsDimension);
+        loginButton.addActionListener(event -> {
+            LoginPage loginPage = new LoginPage();
+            loginPage.setVisible(true);
+            dispose();
+        });
         add(loginButton);
     }
 
-    private void initLoginButton() {
+    private void initRegisterButton() {
         registerButton = new JButton("Register");
         registerButton.setPreferredSize(buttonsDimension);
+        registerButton.addActionListener(event -> {
+            RegisterPage registerPage = new RegisterPage();
+            registerPage.setVisible(true);
+            dispose();
+        });
         add(registerButton);
     }
 
     private void initDefaultValues() {
         setLayout(new FlowLayout());
-        setTitle("Login Page");
+        setTitle("Start Page");
         setSize(300,200);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
