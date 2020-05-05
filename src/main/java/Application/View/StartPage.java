@@ -39,9 +39,9 @@ public class StartPage extends JFrame {
         setLayout(new FlowLayout());
         setTitle("Start Page");
         setSize(300,200);
+        pack();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pack();
         setResizable(false);
         setVisible(true);
     }
