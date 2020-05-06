@@ -1,19 +1,38 @@
 package Application.View;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class DashBoardPage extends JFrame {
-    private HomePage homePage;
-    private MyAccountPage accountPage;
+    private HomePage homePage = new HomePage();
+    private AccountPage accountPage = new AccountPage();
+    private JPanel contentPanel;
     private JMenuBar menuBar;
     private JMenu optionsMenu;
     private JMenuItem homeMenuItem, accountMenuItem, logOutMenuItem;
 
-    DashBoardPage() {
+    public DashBoardPage() {
+        initContentPanel();
         initOptionsMenu();
         initDefaultValues();
+    }
+
+    private void switchPane(JPanel panel) {
+        contentPanel.removeAll();
+        contentPanel.add(panel);
+        contentPanel.revalidate();
+        contentPanel.repaint();
+        pack();
+    }
+
+    private void initContentPanel() {
+        contentPanel = new JPanel();
+//        contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+//        contentPanel.setLayout(new FlowLayout());
+        setContentPane(contentPanel);
     }
 
     private void initOptionsMenu() {
@@ -21,9 +40,8 @@ public class DashBoardPage extends JFrame {
         homeMenuItem = new JMenuItem("Home");
         MouseAdapter onClickHomeMouseAdapter = new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                homePage.setVisible(true);
-                accountPage.setVisible(false);
+            public void mousePressed(MouseEvent e) {
+                switchPane(homePage);
             }
         };
         homeMenuItem.addMouseListener(onClickHomeMouseAdapter);
@@ -32,18 +50,17 @@ public class DashBoardPage extends JFrame {
         accountMenuItem = new JMenuItem("Account");
         MouseAdapter onClickAccountMouseAdapter = new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                accountPage.setVisible(true);
-                homePage.setVisible(false);
+            public void mousePressed(MouseEvent e) {
+                switchPane(accountPage);
             }
         };
-        homeMenuItem.addMouseListener(onClickAccountMouseAdapter);
+        accountMenuItem.addMouseListener(onClickAccountMouseAdapter);
 
         //logoutItem
         logOutMenuItem = new JMenuItem("Log out");
         MouseAdapter onClickLogOutMouseAdapter = new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 LoginPage loginPage = new LoginPage();
                 loginPage.setVisible(true);
                 dispose();
@@ -58,16 +75,18 @@ public class DashBoardPage extends JFrame {
         optionsMenu.add(logOutMenuItem);
 
         //add menu to menu bar
+        menuBar = new JMenuBar();
         menuBar.add(optionsMenu);
-        add(menuBar);
+        setJMenuBar(menuBar);
     }
 
     private void initDefaultValues() {
-//        setLayout(new GridLayout(6, 1));
+//        setLayout(new GridLayout(2, 1));
         setTitle("DashBoard Page");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 500);
 //        pack();
+        setVisible(true); //TODO: Delete after testing dashboard
         setLocationRelativeTo(null);
         setResizable(false);
     }
