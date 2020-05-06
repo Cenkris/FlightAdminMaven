@@ -66,8 +66,9 @@ public class LoginPage extends JFrame {
 
         if (!user.isEmpty()) {
             if (userPassword.equals(inputPassword)) {
-                JOptionPane.showMessageDialog(null, "Connected!");
-                resetFields();
+                DashBoardPage dashBoardPage = new DashBoardPage();
+                dashBoardPage.setVisible(true);
+                dispose();
             } else {
                 JOptionPane.showInternalMessageDialog(null, "Invalid username or password");
                 resetFields();
