@@ -7,30 +7,38 @@ import DataBase.DatabaseConnection;
 import java.sql.Connection;
 
 public class UserController {
-    private UserDAO userDAO;
+    private final UserDAO userDAO;
 
-    public UserController(){
+    public UserController() {
         Connection connection = DatabaseConnection.getConnection();
         userDAO = new UserDAO(connection);
     }
 
-    public void insertUser(User user){
+    public void insertUser(User user) {
         userDAO.insertUser(user);
     }
 
-    public User getUserByUsername(String username){
+    public User getUserByUsername(String username) {
         return userDAO.selectUserByName(username);
     }
 
-    public User getUserByEmail(String email){
+    public User getUserByEmail(String email) {
         return userDAO.selectUserByEmail(email);
     }
 
-    public boolean isNewUser(String username){
+    public boolean isNewUser(String username) {
         return userDAO.selectUserByName(username).isEmpty();
     }
 
     public boolean isNewEmail(String email) {
         return userDAO.selectUserByEmail(email).isEmpty();
+    }
+
+    public void updateUsername(String oldUsername, String newUsername) {
+        userDAO.updateUsername(oldUsername, newUsername);
+    }
+
+    public void updateEmail(String oldEmail, String newEmail) {
+        userDAO.updateEmail(oldEmail, newEmail);
     }
 }

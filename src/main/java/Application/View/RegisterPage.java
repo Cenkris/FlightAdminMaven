@@ -2,6 +2,7 @@ package Application.View;
 
 import Application.Controller.UserController;
 import Application.Model.User;
+import Helper.AccountConstraints;
 
 import javax.swing.*;
 import java.awt.*;
@@ -86,12 +87,12 @@ public class RegisterPage extends JFrame {
 
     private boolean isValidPassword() {
         String password = new String(passwordTextField.getPassword());
-        return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{6,}$");
+        return password.matches(AccountConstraints.PASSWORD_VALIDATOR);
     }
 
     private boolean isEmailPatternValid() {
         String email = emailTextField.getText();
-        return email.matches("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{1,3}$");
+        return email.matches(AccountConstraints.EMAIL_VALIDATOR);
     }
 
     private boolean isValidEmail() {

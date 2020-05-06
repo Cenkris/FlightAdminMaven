@@ -1,6 +1,8 @@
 package Application.View;
 
+import Application.Controller.UserController;
 import Application.Model.User;
+import Audit.UserAudit;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,18 +10,24 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class AccountPage extends JPanel {
+    private final UserController userController = new UserController();
+    //Swing
     private JLabel welcomeMessageLabel;
-    private User loggedUser = new User("marcel", "pass", "v@yahoo.com"); //TODO: replace with UserAudit.getLoggedUser();
+    private User loggedUser = UserAudit.getLoggedUser();
+    //            new User("marcel", "pass", "v@yahoo.com"); //TODO: replace with UserAudit.getLoggedUser();
     private JButton changeUsernameButton, changeEmailButton;
     private JTextField newEmailTextField, newUsernameTextField;
     private JPanel newEmailPanel, newUsernamePanel;
-    private final Dimension TEXT_FIELD_DIMENSION = new Dimension(200,25);
-    private final Dimension BUTTON_FIELD_DIMENSION = new Dimension(150,25);
+    private final Dimension TEXT_FIELD_DIMENSION = new Dimension(200, 25);
+    private final Dimension BUTTON_FIELD_DIMENSION = new Dimension(150, 25);
     private boolean notClickedUsername = true;
     private boolean notClickedEmail = true;
+    private String welcomeMessage = "";
+
 
     public AccountPage() {
-        setLayout(new GridLayout(4,1));
+        setLayout(new GridLayout(4, 1));
+        writeMessage();
         initWelcomeMessage();
         initNewEmailPanel();
         initNewUsernamePanel();
@@ -42,7 +50,7 @@ public class AccountPage extends JPanel {
         MouseAdapter usernameMouseAdapter = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if(notClickedUsername){
+                if (notClickedUsername) {
                     newUsernameTextField.setText("");
                     notClickedUsername = false;
                 }
@@ -51,13 +59,18 @@ public class AccountPage extends JPanel {
         newUsernameTextField.addMouseListener(usernameMouseAdapter);
 
         //button
-        changeEmailButton = new JButton("Change username");
-        changeEmailButton.setPreferredSize(BUTTON_FIELD_DIMENSION);
+        changeUsernameButton = new JButton("Change username");
+        changeUsernameButton.setPreferredSize(BUTTON_FIELD_DIMENSION);
+        changeUsernameButton.addActionListener(event -> changeUsername());
 
         //add components
-        newUsernamePanel.add(changeEmailButton);
+        newUsernamePanel.add(changeUsernameButton);
         newUsernamePanel.add(newUsernameTextField);
         add(newUsernamePanel);
+    }
+
+    private void changeEmail() {
+
     }
 
     private void initNewEmailPanel() {
@@ -70,7 +83,7 @@ public class AccountPage extends JPanel {
         MouseAdapter emailMouseAdapter = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if(notClickedEmail){
+                if (notClickedEmail) {
                     newEmailTextField.setText("");
                     notClickedEmail = false;
                 }
@@ -80,26 +93,50 @@ public class AccountPage extends JPanel {
         newEmailTextField.addMouseListener(emailMouseAdapter);
 
         //button
-        changeUsernameButton = new JButton("Change email");
-        changeUsernameButton.setPreferredSize(BUTTON_FIELD_DIMENSION);
+        changeEmailButton = new JButton("Change email");
+        changeEmailButton.setPreferredSize(BUTTON_FIELD_DIMENSION);
+        changeEmailButton.addActionListener(event -> changeEmail());
 
         //add components
-        newEmailPanel.add(changeUsernameButton);
+        newEmailPanel.add(changeEmailButton);
         newEmailPanel.add(newEmailTextField);
         add(newEmailPanel);
     }
 
-    private void initWelcomeMessage() {
-        //message
-        String message = "Hello " + loggedUser.getUsername() + "! " +
+    private void changeUsername() {
+        String inputUsername = newUsernameTextField.getText();
+        if (!inputUsername.isEmpty() && userController.isNewUser(inputUsername)) {
+            userController.updateUsername(loggedUser.getUsername(), inputUsername);
+            JOptionPane.showMessageDialog(null, "Username " + loggedUser.getUsername()
+                    + " was changed to " + inputUsername);
+            newUsernameTextField.setText("");
+            UserAudit.loggedUser = userController.getUserByUsername(inputUsername);
+            loggedUser = UserAudit.getLoggedUser();
+            writeMessage();
+            welcomeMessageLabel.setText(welcomeMessage);
+        } else if (inputUsername.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please input a username");
+            newUsernameTextField.setText("");
+            newUsernameTextField.requestFocus();
+        } else {
+            JOptionPane.showMessageDialog(null, "Username already exists!");
+            newUsernameTextField.setText("");
+            newUsernameTextField.requestFocus();
+        }
+    }
+    private void writeMessage(){
+        welcomeMessage = "Hello " + loggedUser.getUsername() + "! " +
                 "You are logged with " + loggedUser.getEmail();
+    }
+
+    private void initWelcomeMessage() {
 
         //calculations for text dimension
-        int messageLengthDimension = message.length() * 7;
+        int messageLengthDimension = welcomeMessage.length() * 7;
         Dimension textDimension = new Dimension(messageLengthDimension, 30);
 
         //Jlable props
-        welcomeMessageLabel = new JLabel(message);
+        welcomeMessageLabel = new JLabel(welcomeMessage);
         welcomeMessageLabel.setPreferredSize(textDimension);
         welcomeMessageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         add(welcomeMessageLabel);

@@ -9,16 +9,17 @@ import java.sql.SQLException;
 
 public class UserDAO {
 
-    private Connection connection;
     private PreparedStatement insertQuery;
     private PreparedStatement selectUserByNameQuery, selectUserByEmailQuery;
+    private PreparedStatement updateUsernameQuery, updateEmailQuery;
 
     public UserDAO(Connection connection) {
-        this.connection = connection;
         try {
             insertQuery = connection.prepareStatement("INSERT INTO users VALUES (null, ?, ?, ?)");
             selectUserByNameQuery = connection.prepareStatement("SELECT * FROM users WHERE username = ?");
             selectUserByEmailQuery = connection.prepareStatement("SELECT * FROM users WHERE email = ?");
+            updateUsernameQuery = connection.prepareStatement("UPDATE users SET username = ? WHERE username = ?");
+            updateEmailQuery = connection.prepareStatement("UPDATE users SET email = ? where email = ?");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -66,6 +67,28 @@ public class UserDAO {
             throwables.printStackTrace();
         }
         return user;
+    }
+
+    public boolean updateUsername(String oldUsername, String newUsername) {
+        try {
+            updateUsernameQuery.setString(1, newUsername);
+            updateUsernameQuery.setString(2, oldUsername);
+            return updateUsernameQuery.executeUpdate() != 0;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateEmail(String oldEmail, String newEmail) {
+        try {
+            updateUsernameQuery.setString(1, newEmail);
+            updateUsernameQuery.setString(2, oldEmail);
+            return updateUsernameQuery.executeUpdate() != 0;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
     }
 }
 
