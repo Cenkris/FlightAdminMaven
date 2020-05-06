@@ -39,6 +39,7 @@ public class AccountPage extends JPanel {
         changePasswordButton = new JButton("Change Password");
         changePasswordButton.addActionListener(event->{
             ChangePasswordPage changePasswordPage = new ChangePasswordPage();
+            changePasswordPage.parent(this);
             changePasswordPage.setVisible(true);
         });
         add(changePasswordButton);

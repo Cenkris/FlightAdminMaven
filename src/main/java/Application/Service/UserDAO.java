@@ -11,7 +11,7 @@ public class UserDAO {
 
     private PreparedStatement insertQuery;
     private PreparedStatement selectUserByNameQuery, selectUserByEmailQuery;
-    private PreparedStatement updateUsernameQuery, updateEmailQuery;
+    private PreparedStatement updateUsernameQuery, updateEmailQuery, updatePasswordQuery;
 
     public UserDAO(Connection connection) {
         try {
@@ -19,22 +19,22 @@ public class UserDAO {
             selectUserByNameQuery = connection.prepareStatement("SELECT * FROM users WHERE username = ?");
             selectUserByEmailQuery = connection.prepareStatement("SELECT * FROM users WHERE email = ?");
             updateUsernameQuery = connection.prepareStatement("UPDATE users SET username = ? WHERE username = ?");
-            updateEmailQuery = connection.prepareStatement("UPDATE users SET email = ? where email = ?");
+            updateEmailQuery = connection.prepareStatement("UPDATE users SET email = ? WHERE email = ?");
+            updatePasswordQuery = connection.prepareStatement("UPDATE users SET password = ? WHERE username = ?");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
 
-    public boolean insertUser(User user) {
+    public void insertUser(User user) {
         try {
             insertQuery.setString(1, user.getUsername());
             insertQuery.setString(2, user.getPassword());
             insertQuery.setString(3, user.getEmail());
-            return insertQuery.executeUpdate() != 0;
+            insertQuery.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return false;
     }
 
     public User selectUserByName(String name) {
@@ -69,26 +69,34 @@ public class UserDAO {
         return user;
     }
 
-    public boolean updateUsername(String oldUsername, String newUsername) {
+    public void updateUsername(String oldUsername, String newUsername) {
         try {
             updateUsernameQuery.setString(1, newUsername);
             updateUsernameQuery.setString(2, oldUsername);
-            return updateUsernameQuery.executeUpdate() != 0;
+            updateUsernameQuery.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return false;
     }
 
-    public boolean updateEmail(String oldEmail, String newEmail) {
+    public void updateEmail(String oldEmail, String newEmail) {
         try {
             updateEmailQuery.setString(1, newEmail);
             updateEmailQuery.setString(2, oldEmail);
-            return updateEmailQuery.executeUpdate() != 0;
+            updateEmailQuery.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return false;
+    }
+
+    public void updatePassword(User user, String newPassword) {
+        try {
+            updatePasswordQuery.setString(1, newPassword);
+            updatePasswordQuery.setString(2, user.getUsername());
+            updatePasswordQuery.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }
 

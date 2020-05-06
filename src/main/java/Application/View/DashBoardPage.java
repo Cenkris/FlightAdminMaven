@@ -1,8 +1,6 @@
 package Application.View;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -82,8 +80,9 @@ public class DashBoardPage extends JFrame {
 
     private void initDefaultValues() {
 //        setLayout(new GridLayout(2, 1));
+        setName("DashBoard");
         setTitle("DashBoard Page");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(900, 500);
 //        pack();
         setVisible(true); //TODO: Delete after testing dashboard

@@ -41,4 +41,8 @@ public class UserController {
     public void updateEmail(String oldEmail, String newEmail) {
         userDAO.updateEmail(oldEmail, newEmail);
     }
+
+    public void updatePassword(User user, String password) {
+        userDAO.updatePassword(user, password);
+    }
 }
