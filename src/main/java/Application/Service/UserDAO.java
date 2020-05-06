@@ -82,9 +82,9 @@ public class UserDAO {
 
     public boolean updateEmail(String oldEmail, String newEmail) {
         try {
-            updateUsernameQuery.setString(1, newEmail);
-            updateUsernameQuery.setString(2, oldEmail);
-            return updateUsernameQuery.executeUpdate() != 0;
+            updateEmailQuery.setString(1, newEmail);
+            updateEmailQuery.setString(2, oldEmail);
+            return updateEmailQuery.executeUpdate() != 0;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

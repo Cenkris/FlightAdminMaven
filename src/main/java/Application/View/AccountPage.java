@@ -3,6 +3,7 @@ package Application.View;
 import Application.Controller.UserController;
 import Application.Model.User;
 import Audit.UserAudit;
+import Helper.AccountConstraints;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +38,6 @@ public class AccountPage extends JPanel {
     private void initChangePasswordButton() {
         changeEmailButton = new JButton("Change Password");
         add(changeEmailButton);
-        System.out.println(changeEmailButton.getSize());
     }
 
     private void initNewUsernamePanel() {
@@ -70,7 +70,38 @@ public class AccountPage extends JPanel {
     }
 
     private void changeEmail() {
+        String inputEmail = newEmailTextField.getText();
+        if (!inputEmail.isEmpty() && userController.isNewEmail(inputEmail) && inputEmail.matches(AccountConstraints.EMAIL_VALIDATOR)) {
+            userController.updateEmail(loggedUser.getEmail(), inputEmail);
 
+            JOptionPane.showMessageDialog(null, "email " + loggedUser.getEmail()
+                    + " was changed to " + inputEmail);
+
+
+            newEmailTextField.setText("");
+            UserAudit.loggedUser = userController.getUserByEmail(inputEmail);
+            loggedUser = UserAudit.getLoggedUser();
+            writeMessage();
+            welcomeMessageLabel.setText(welcomeMessage);
+
+        } else if (inputEmail.isEmpty()) {
+
+            JOptionPane.showMessageDialog(null, "Please input an email address");
+            newEmailTextField.setText("");
+            newEmailTextField.requestFocus();
+
+        } else if (!inputEmail.matches(AccountConstraints.EMAIL_VALIDATOR)) {
+
+            JOptionPane.showMessageDialog(null, "Please input a valid email address");
+            newEmailTextField.setText("");
+            newEmailTextField.requestFocus();
+
+        } else {
+
+            JOptionPane.showMessageDialog(null, "Email already exists!");
+            newEmailTextField.setText("");
+            newEmailTextField.requestFocus();
+        }
     }
 
     private void initNewEmailPanel() {
@@ -124,7 +155,8 @@ public class AccountPage extends JPanel {
             newUsernameTextField.requestFocus();
         }
     }
-    private void writeMessage(){
+
+    private void writeMessage() {
         welcomeMessage = "Hello " + loggedUser.getUsername() + "! " +
                 "You are logged with " + loggedUser.getEmail();
     }
