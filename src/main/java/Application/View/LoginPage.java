@@ -11,9 +11,9 @@ public class LoginPage extends JFrame {
     private final UserController userController = new UserController();
 
     //swing components
-    private JPanel usernamePanel, passwordPanel, loginPanel;
-    private JLabel usernameLabel, passwordLabel, messageLabel;
-    private JTextField usernameTextField;
+    private JPanel usernameOrEmailPanel, passwordPanel, loginPanel;
+    private JLabel usernameOrEmailLabel, passwordLabel, messageLabel;
+    private JTextField usernameOrEmailTextField;
     private JPasswordField passwordTextField;
     private JButton loginButton, registerButton;
     private final Dimension FIELD_DIMENSIONS = new Dimension(150, 30);
@@ -60,12 +60,11 @@ public class LoginPage extends JFrame {
     }
 
     private void login() {
-        String inputUsername = usernameTextField.getText();
+        User user = emailOrUsernameInserted();
         String inputPassword = new String(passwordTextField.getPassword());
+        String userPassword = user.getPassword();
 
-        if (!userController.isNewUser(inputUsername)) {
-            User user = userController.getUserByUsername(inputUsername);
-            String userPassword = user.getPassword();
+        if (!user.isEmpty()) {
             if (userPassword.equals(inputPassword)) {
                 JOptionPane.showMessageDialog(null, "Connected!");
                 resetFields();
@@ -73,39 +72,71 @@ public class LoginPage extends JFrame {
                 JOptionPane.showInternalMessageDialog(null, "Invalid username or password");
                 resetFields();
             }
-        } else {
-            JOptionPane.showInternalMessageDialog(null, "Please input both username and password");
-            resetFields();
         }
     }
 
+    private User emailOrUsernameInserted() {
+        String inputCredentials = usernameOrEmailTextField.getText();
+        User user = new User();
+
+        boolean inputIsEmail = false;
+        if (inputCredentials.contains("@")) {
+            inputIsEmail = true;
+        }
+
+        if (usernameOrEmailTextField.getText().isEmpty() || new String(passwordTextField.getPassword()).isEmpty()) {
+            JOptionPane.showInternalMessageDialog(null, "Please input both username and password");
+            resetFields();
+        } else {
+            if (inputIsEmail) {
+                if (!userController.isNewEmail(inputCredentials)) {
+                    user = userController.getUserByEmail(inputCredentials);
+                } else {
+                    accountNotFound();
+                }
+            } else {
+                if (!userController.isNewUser(inputCredentials)) {
+                    user = userController.getUserByUsername(inputCredentials);
+                } else {
+                    accountNotFound();
+                }
+            }
+        }
+        return user;
+    }
+
+    private void accountNotFound() {
+        JOptionPane.showInternalMessageDialog(null, "Account not found in DB");
+        resetFields();
+    }
+
     private void resetFields() {
-        usernameTextField.requestFocus();
-        usernameTextField.setText("");
+        usernameOrEmailTextField.requestFocus();
+        usernameOrEmailTextField.setText("");
         passwordTextField.setText("");
     }
 
     private void initUsernamePanel() {
         //panel
-        usernamePanel = new JPanel(new FlowLayout());
+        usernameOrEmailPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         //label
-        usernameLabel = new JLabel("username: ");
+        usernameOrEmailLabel = new JLabel("username/email: ");
 
         //field
-        usernameTextField = new JTextField();
-        usernameTextField.setPreferredSize(FIELD_DIMENSIONS);
-        usernameTextField.addActionListener(event -> login());
+        usernameOrEmailTextField = new JTextField();
+        usernameOrEmailTextField.setPreferredSize(FIELD_DIMENSIONS);
+        usernameOrEmailTextField.addActionListener(event -> login());
 
         //add components
-        usernamePanel.add(usernameLabel);
-        usernamePanel.add(usernameTextField);
-        add(usernamePanel);
+        usernameOrEmailPanel.add(usernameOrEmailLabel);
+        usernameOrEmailPanel.add(usernameOrEmailTextField);
+        add(usernameOrEmailPanel);
     }
 
     private void initPasswordPanel() {
         //panel
-        passwordPanel = new JPanel(new FlowLayout());
+        passwordPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         //label
         passwordLabel = new JLabel("password: ");

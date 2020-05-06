@@ -22,11 +22,15 @@ public class UserController {
         return userDAO.selectUserByName(username);
     }
 
+    public User getUserByEmail(String email){
+        return userDAO.selectUserByEmail(email);
+    }
+
     public boolean isNewUser(String username){
-        return userDAO.selectUserByName(username).getUsername() == null;
+        return userDAO.selectUserByName(username).isEmpty();
     }
 
     public boolean isNewEmail(String email) {
-        return userDAO.selectUserByEmail(email).getEmail() == null;
+        return userDAO.selectUserByEmail(email).isEmpty();
     }
 }

@@ -61,7 +61,7 @@ public class RegisterPage extends JFrame {
                         "\t - minimum 6 characters; \n" +
                         "\t - at least a capital letter; \n" +
                         "\t - at least a non-capital letter \n" +
-                        "\t - at leas one digit;");
+                        "\t - at least one digit;");
                 passwordTextField.requestFocus();
             } else if (!arePasswordsMatch()) {
                 JOptionPane.showMessageDialog(null, "Passwords must match");
@@ -77,11 +77,11 @@ public class RegisterPage extends JFrame {
     }
 
     private boolean allFieldsValid() {
-        return isValidPassword() &&
-                arePasswordsMatch() &&
-                userController.isNewUser(usernameTextField.getText()) &&
-                !someFieldsAreEmpty() &&
-                isValidEmail();
+        return isValidPassword() && //password must follow pattern min 6 chars, at least one capital, one lowercase and one digit, no spaces
+                arePasswordsMatch() && // password and confirm password must be the same
+                userController.isNewUser(usernameTextField.getText()) && //check if username already exists
+                !someFieldsAreEmpty() && //check if there are any fields empty -> username can't be empty
+                isValidEmail(); // check if email already exists and if follows pattern: minimum valid a@b.c
     }
 
     private boolean isValidPassword() {
@@ -97,6 +97,7 @@ public class RegisterPage extends JFrame {
     private boolean isValidEmail() {
         return isEmailPatternValid() && userController.isNewEmail(emailTextField.getText());
     }
+
 
     private boolean someFieldsAreEmpty() {
         return usernameTextField.getText().isEmpty() ||
