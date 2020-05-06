@@ -14,6 +14,7 @@ public class DashBoardPage extends JFrame {
 
     public DashBoardPage() {
         initContentPanel();
+        switchPane(homePage);
         initOptionsMenu();
         initDefaultValues();
     }
@@ -84,9 +85,9 @@ public class DashBoardPage extends JFrame {
         setTitle("DashBoard Page");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(900, 500);
-//        pack();
-        setVisible(true); //TODO: Delete after testing dashboard
+        pack();
         setLocationRelativeTo(null);
+        setVisible(true); //TODO: Delete after testing dashboard
         setResizable(false);
     }
 }
