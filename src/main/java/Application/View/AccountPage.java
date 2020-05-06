@@ -16,7 +16,7 @@ public class AccountPage extends JPanel {
     private JLabel welcomeMessageLabel;
     private User loggedUser = UserAudit.getLoggedUser();
     //            new User("marcel", "pass", "v@yahoo.com"); //TODO: replace with UserAudit.getLoggedUser();
-    private JButton changeUsernameButton, changeEmailButton;
+    private JButton changeUsernameButton, changeEmailButton, changePasswordButton;
     private JTextField newEmailTextField, newUsernameTextField;
     private JPanel newEmailPanel, newUsernamePanel;
     private final Dimension TEXT_FIELD_DIMENSION = new Dimension(200, 25);
@@ -36,8 +36,12 @@ public class AccountPage extends JPanel {
     }
 
     private void initChangePasswordButton() {
-        changeEmailButton = new JButton("Change Password");
-        add(changeEmailButton);
+        changePasswordButton = new JButton("Change Password");
+        changePasswordButton.addActionListener(event->{
+            ChangePasswordPage changePasswordPage = new ChangePasswordPage();
+            changePasswordPage.setVisible(true);
+        });
+        add(changePasswordButton);
     }
 
     private void initNewUsernamePanel() {

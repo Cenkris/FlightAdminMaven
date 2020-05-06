@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class LoginPage extends JFrame {
+
     private final UserController userController = new UserController();
 
     //swing components
