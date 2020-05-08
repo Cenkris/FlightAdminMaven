@@ -1,6 +1,6 @@
 package Application.View;
 
-import Application.Model.TableRendenderer;
+import Application.Model.TableRenderer;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -21,8 +21,8 @@ public class HomePage extends JPanel {
     private JButton addFlightButton, deleteFlightButton;
     private String[] colNames = {"", "Sursa", "Destinatie", "Ora Plecare", "Ora Sosire", "Zile", "Pret"};
     private final int xAxisDimension = 600;
-    private TableCellRenderer tableCellRenderer;
     private DefaultTableModel flightTableModel;
+
 
     public HomePage() {
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -35,15 +35,7 @@ public class HomePage extends JPanel {
     private void initDeleteFlightButton() {
         deleteFlightButton = new JButton();
         deleteFlightButton.setBackground(Color.RED);
-
-        MouseAdapter deleteMouseAdapter = new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                JOptionPane.showMessageDialog(null,"GG");
-            }
-        };
-
-        deleteFlightButton.addMouseListener(deleteMouseAdapter);
+        deleteFlightButton.setName("del");
     }
 
     private void initAddFlightButton() {
@@ -68,11 +60,29 @@ public class HomePage extends JPanel {
 
         initTableModel();
         fligthTable = new JTable(flightTableModel);
-        initTableCellRenderer();
-        setColumnNames(flightTableModel);
-//        addRowsToTable(data, flightTableModel);
+        MouseAdapter deleteMouseAdapter = new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                System.out.println(e.getComponent().getClass());
+                if (e.getComponent() instanceof JTable) {
+                    JTable table = (JTable) e.getComponent();
+                    int selectedColumn = table.getSelectedColumn();
+                    int selectedRow = table.getSelectedRow();
+                    if (selectedColumn == 0 && selectedRow >= 0) {
+                        JOptionPane.showMessageDialog(null, "Are you sure you want to delete flight");
+                    }
+
+
+                }
+            }
+        };
+        fligthTable.addMouseListener(deleteMouseAdapter);
+
+        setColumnNames();
+        addRowsToTable(data);
         setTableColumnPreferences();
 
+        initTableCellRenderer();
         JScrollPane scrollPane = new JScrollPane(fligthTable);
         JScrollBar scrollBar = new JScrollBar();
         scrollPane.setVerticalScrollBar(scrollBar);
@@ -110,15 +120,15 @@ public class HomePage extends JPanel {
     }
 
     private void initTableCellRenderer() {
-        tableCellRenderer = fligthTable.getDefaultRenderer(JButton.class);
-        fligthTable.setDefaultRenderer(JButton.class, new TableRendenderer(tableCellRenderer));
+        TableCellRenderer tableCellRenderer = fligthTable.getDefaultRenderer(JButton.class);
+        fligthTable.setDefaultRenderer(JButton.class, new TableRenderer(tableCellRenderer));
     }
 
     private void initTableModel() {
         flightTableModel = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 0;
+                return false;
             }
 
             @Override
@@ -131,12 +141,12 @@ public class HomePage extends JPanel {
 
     }
 
-    private void addRowsToTable(Object[][] data, DefaultTableModel flightTableModel) {
+    private void addRowsToTable(Object[][] data) {
         flightTableModel.addRow(data[0]);
         flightTableModel.addRow(data[1]);
     }
 
-    private void setColumnNames(DefaultTableModel flightTableModel) {
+    private void setColumnNames() {
         //set column names
         for (Object colName : colNames) {
             flightTableModel.addColumn(colName);
