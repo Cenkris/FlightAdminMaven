@@ -1,5 +1,7 @@
 package Application.View;
 
+import Application.Model.Flight;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
@@ -30,8 +32,7 @@ public class AddFlightPage extends JFrame {
 
         //Buttons
         addFlightButton = new JButton("Adauga Zbor");
-        addFlightButton.addActionListener(event -> {
-        });
+        addFlightButton.addActionListener(event -> addFlight());
 
         abortButton = new JButton("Anuleaza");
         abortButton.addActionListener(event -> dispose());
@@ -78,7 +79,7 @@ public class AddFlightPage extends JFrame {
 
         //add components
         daysPanel.add(daysLabel);
-        for(JCheckBox checkbox : daysCheckBox){
+        for (JCheckBox checkbox : daysCheckBox) {
             daysPanel.add(checkbox);
         }
 
@@ -162,6 +163,21 @@ public class AddFlightPage extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
+    }
+
+    public void addFlight() {
+        if(allFieldsAreValid()){
+            JOptionPane.showConfirmDialog(null,"GG");
+        }
+    }
+
+    private boolean allFieldsAreValid() {
+        return !isSourceSameAsDestination() &&
+                cityHasMoreThanThreeLetters(sourceTextField.getText()) &&
+                cityHasMoreThanThreeLetters(destinationTextField.getText()) &&
+                isValidHourFormat(leaveHourTextField.getText()) &&
+                isValidHourFormat(durationTextField.getText()) &&
+                isPricePositive();
     }
 
     private boolean isSourceSameAsDestination() {

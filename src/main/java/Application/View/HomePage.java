@@ -3,10 +3,7 @@ package Application.View;
 import Application.Model.TableRenderer;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
+import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -103,6 +100,8 @@ public class HomePage extends JPanel {
 
     private void setTableColumnPreferences() {
         TableColumnModel columnModel = fligthTable.getColumnModel();
+        DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
+        centerRender.setHorizontalAlignment(SwingConstants.CENTER);
 
         //buttons Column
         TableColumn buttonsColumn = columnModel.getColumn(0);
@@ -110,21 +109,27 @@ public class HomePage extends JPanel {
 
         TableColumn sursaColumn = columnModel.getColumn(1);
         sursaColumn.setPreferredWidth(100);
+        sursaColumn.setCellRenderer(centerRender);
 
         TableColumn destinatieColumn = columnModel.getColumn(2);
         destinatieColumn.setPreferredWidth(100);
+        destinatieColumn.setCellRenderer(centerRender);
 
         TableColumn oraPlecareColumn = columnModel.getColumn(3);
         oraPlecareColumn.setPreferredWidth(80);
+        oraPlecareColumn.setCellRenderer(centerRender);
 
         TableColumn oraSosireColumn = columnModel.getColumn(4);
         oraSosireColumn.setPreferredWidth(80);
+        oraSosireColumn.setCellRenderer(centerRender);
 
         TableColumn zileColumn = columnModel.getColumn(5);
         zileColumn.setPreferredWidth(180);
+        zileColumn.setCellRenderer(centerRender);
 
         TableColumn pretColumn = columnModel.getColumn(6);
         pretColumn.setPreferredWidth(70);
+        pretColumn.setCellRenderer(centerRender);
 
     }
 

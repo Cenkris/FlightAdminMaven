@@ -17,7 +17,7 @@ public class RegisterPage extends JFrame {
     private JTextField usernameTextField, emailTextField;
     private JPasswordField passwordTextField, confirmPasswordField;
     private JButton registerButton;
-    private final Dimension FIELD_DIMENSIONS = new Dimension(150, 30);
+    private final Dimension FIELD_DIMENSIONS = new Dimension(200, 30);
 
     RegisterPage() {
         initHelpMessage();
@@ -188,7 +188,7 @@ public class RegisterPage extends JFrame {
     }
 
     private void initDefaultValues() {
-        setLayout(new GridLayout(6, 1));
+        setLayout(new GridLayout(6,1));
         setTitle("Register Page");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 900);
