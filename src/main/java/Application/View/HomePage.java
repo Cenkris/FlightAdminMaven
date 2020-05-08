@@ -44,7 +44,11 @@ public class HomePage extends JPanel {
         JPanel buttonPannel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         addFlightButton = new JButton("Add Flight");
         addFlightButton.setPreferredSize(new Dimension(xAxisDimension, 30));
-        addFlightButton.addActionListener(event -> addRow());
+        addFlightButton.addActionListener(event -> {
+            AddFlightPage addFlightPage = new AddFlightPage();
+            addFlightPage.setVisible(true);
+        });
+
         //add component
         buttonPannel.add(addFlightButton);
         add(buttonPannel);
@@ -63,13 +67,18 @@ public class HomePage extends JPanel {
         MouseAdapter deleteMouseAdapter = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                System.out.println(e.getComponent().getClass());
                 if (e.getComponent() instanceof JTable) {
                     JTable table = (JTable) e.getComponent();
                     int selectedColumn = table.getSelectedColumn();
                     int selectedRow = table.getSelectedRow();
                     if (selectedColumn == 0 && selectedRow >= 0) {
-                        JOptionPane.showMessageDialog(null, "Are you sure you want to delete flight");
+                        int answer = JOptionPane.showConfirmDialog(null,
+                                "Are you sure you want to delete the flight corresponding to this row?",
+                                "Delete Flight", JOptionPane.YES_NO_OPTION);
+                        if (answer == JOptionPane.YES_OPTION) {
+                            flightTableModel.removeRow(selectedRow);
+                            //TODO: delete database info
+                        }
                     }
 
 
