@@ -1,6 +1,8 @@
 package Application.View;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -8,43 +10,56 @@ import java.util.Date;
 
 public class HomePage extends JPanel {
     private JLabel clockLabel;
-    private JPanel clockPanel, tablePanel;
+    private JPanel clockPanel;
     private JTable fligthTable;
+    private JButton addFlightButton;
     private String[][] data = {{"Bucuresti", "Londra", "7:40", "10:25", "Luni, Marti, Joi", "1040"},
             {"Londra", "Bucuresti", "13:05", "15:40", "Marti, Sambate", "965"}};
     private String[] colNames = {"Sursa", "Destinatie", "Ora Plecare", "Ora Sosire", "Zile", "Pret"};
-    private int counter = 3;
 
     public HomePage() {
-        setLayout(new GridLayout(3, 1));
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         initClock();
         initTablePanel();
+        initAddFlightButton();
+    }
+
+    private void initAddFlightButton() {
+        JPanel buttonPannel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        addFlightButton = new JButton("Add Flight");
+        addFlightButton.setPreferredSize(new Dimension(500, 30));
+        addFlightButton.addActionListener(event -> addRow());
+
+        //add component
+        buttonPannel.add(addFlightButton);
+        add(buttonPannel);
+    }
+
+    private void addRow() {
+
     }
 
     private void initTablePanel() {
-        tablePanel = new JPanel();
-        JButton increaseRows = new JButton("increase");
-        increaseRows.addActionListener(e -> {
-            counter++;
-            setLayout(new GridLayout(counter, 1));
-            add(new JButton());
-            validate();
-            repaint();
-        });
+        DefaultTableModel flightTableModel = new DefaultTableModel(){
+        };
+        fligthTable = new JTable(flightTableModel);
 
+        //set column names
+        for(String colName : colNames){
+            flightTableModel.addColumn(colName);
+        }
 
-        JButton decreaseRows = new JButton("decrease");
-        decreaseRows.addActionListener(e -> {
-            counter--;
-            setLayout(new GridLayout(counter, 1));
+        //add rows
+        flightTableModel.addRow(data[0]);
+//        fligthTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-            validate();
-            repaint();
-        });
+        JScrollPane scrollPane = new JScrollPane(fligthTable);
+        JScrollBar scrollBar = new JScrollBar();
+        scrollPane.setVerticalScrollBar(scrollBar);
+        scrollPane.setPreferredSize(new Dimension(500,100));
 
-        tablePanel.add(increaseRows);
-        tablePanel.add(decreaseRows);
-        add(tablePanel);
+        //add component
+        add(scrollPane);
     }
 
     private void initClock() {
