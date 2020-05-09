@@ -1,16 +1,14 @@
 package Application.View;
 
-import Application.Model.Flight;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
 public class AddFlightPage extends JFrame {
-    private JLabel sourceLabel, destinationLabel, leaveHourLabel, durationLabel, daysLabel, priceLabel;
-    private JTextField sourceTextField, destinationTextField, leaveHourTextField, durationTextField, priceTextField;
-    private JPanel sourcePanel, destinationPanel, leaveHourPanel, durationPanel, daysPanel, pricePanel, buttonsPanel;
+    private JLabel sourceLabel, destinationLabel, departureHourLabel, durationLabel, daysLabel, priceLabel;
+    private JTextField sourceTextField, destinationTextField, departureHourTextField, durationTextField, priceTextField;
+    private JPanel sourcePanel, destinationPanel, departureHourPanel, durationPanel, daysPanel, pricePanel, buttonsPanel;
     private JButton addFlightButton, abortButton;
     private List<JCheckBox> daysCheckBox;
     private final Dimension TEXTFIELD_DIMENSIONS = new Dimension(200, 30);
@@ -31,10 +29,10 @@ public class AddFlightPage extends JFrame {
         buttonsPanel = new JPanel();
 
         //Buttons
-        addFlightButton = new JButton("Adauga Zbor");
+        addFlightButton = new JButton("Add Flight");
         addFlightButton.addActionListener(event -> addFlight());
 
-        abortButton = new JButton("Anuleaza");
+        abortButton = new JButton("Abort");
         abortButton.addActionListener(event -> dispose());
 
         //add components
@@ -48,7 +46,7 @@ public class AddFlightPage extends JFrame {
         pricePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         //Label
-        priceLabel = new JLabel("Pret: ");
+        priceLabel = new JLabel("Price: ");
 
         //text field
         priceTextField = new JTextField();
@@ -63,19 +61,19 @@ public class AddFlightPage extends JFrame {
     private void initDaysPanel() {
         //Panel
         daysPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        daysPanel.setPreferredSize(new Dimension(TEXTFIELD_DIMENSIONS.width + leaveHourTextField.getText().length(), 60));
+        daysPanel.setPreferredSize(new Dimension(200, 60));
 
         //Label
-        daysLabel = new JLabel("Zile: ");
+        daysLabel = new JLabel("Days: ");
 
         //checkBoxes
-        daysCheckBox = Arrays.asList(new JCheckBox("Luni"),
-                new JCheckBox("Marti"),
-                new JCheckBox("Miercuri"),
-                new JCheckBox("Joi"),
-                new JCheckBox("Vineri"),
-                new JCheckBox("Sambata"),
-                new JCheckBox("Duminica"));
+        daysCheckBox = Arrays.asList(new JCheckBox("Monday"),
+                new JCheckBox("Tuesday"),
+                new JCheckBox("Wednesday"),
+                new JCheckBox("Thursday"),
+                new JCheckBox("Friday"),
+                new JCheckBox("Saturday"),
+                new JCheckBox("Sunday"));
 
         //add components
         daysPanel.add(daysLabel);
@@ -91,7 +89,7 @@ public class AddFlightPage extends JFrame {
         durationPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         //Label
-        durationLabel = new JLabel("Durata: ");
+        durationLabel = new JLabel("Duration: ");
 
         //text field
         durationTextField = new JTextField();
@@ -105,19 +103,19 @@ public class AddFlightPage extends JFrame {
 
     private void initLeaveHourPanel() {
         //Panel
-        leaveHourPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        departureHourPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         //Label
-        leaveHourLabel = new JLabel("Ora Plecare: ");
+        departureHourLabel = new JLabel("Departure hour: ");
 
         //text field
-        leaveHourTextField = new JTextField();
-        leaveHourTextField.setPreferredSize(TEXTFIELD_DIMENSIONS);
+        departureHourTextField = new JTextField();
+        departureHourTextField.setPreferredSize(TEXTFIELD_DIMENSIONS);
 
         //add components
-        leaveHourPanel.add(leaveHourLabel);
-        leaveHourPanel.add(leaveHourTextField);
-        add(leaveHourPanel);
+        departureHourPanel.add(departureHourLabel);
+        departureHourPanel.add(departureHourTextField);
+        add(departureHourPanel);
     }
 
     private void initDestinationPanel() {
@@ -125,7 +123,7 @@ public class AddFlightPage extends JFrame {
         destinationPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         //Label
-        destinationLabel = new JLabel("Destinatie: ");
+        destinationLabel = new JLabel("Destination: ");
 
         //text field
         destinationTextField = new JTextField();
@@ -142,7 +140,7 @@ public class AddFlightPage extends JFrame {
         sourcePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         //Label
-        sourceLabel = new JLabel("Sursa: ");
+        sourceLabel = new JLabel("Source: ");
 
         //text field
         sourceTextField = new JTextField();
@@ -166,18 +164,50 @@ public class AddFlightPage extends JFrame {
     }
 
     public void addFlight() {
-        if(allFieldsAreValid()){
-            JOptionPane.showConfirmDialog(null,"GG");
+        String source = sourceTextField.getText();
+        String destination = destinationTextField.getText();
+        String departureHour = departureHourTextField.getText();
+        String duration = durationTextField.getText();
+
+
+        if (someFieldsAreEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please complete all fields");
+        } else {
+            if (allFieldsAreValid()) {
+                JOptionPane.showConfirmDialog(null, "GG");
+                //TODO add to datablase
+            } else if (noDaysSelected()) {
+                JOptionPane.showMessageDialog(null, "You must select at least one day");
+            } else if (!cityHasMoreThanThreeLetters(source)) {
+                JOptionPane.showMessageDialog(null, "Source must be at least 3 letters long");
+                sourceTextField.requestFocus();
+            } else if (!cityHasMoreThanThreeLetters(destination)) {
+                JOptionPane.showMessageDialog(null, "Destination must be at least 3 letters long");
+                destinationTextField.requestFocus();
+            } else if (isSourceSameAsDestination()) {
+                JOptionPane.showMessageDialog(null, "Source and destination can't be the same");
+                sourceTextField.requestFocus();
+            } else if (!isValidHourFormat(departureHour)) {
+                JOptionPane.showMessageDialog(null, "Departure field hour needs to have Hours:Minutes format");
+                departureHourTextField.requestFocus();
+            } else if (!isValidHourFormat(duration)) {
+                JOptionPane.showMessageDialog(null, "Duration field needs to have Hours:Minutes format");
+                durationTextField.requestFocus();
+            } else if (!isPricePositiveNumber()) {
+                JOptionPane.showMessageDialog(null, "Price value must be a number more than 0");
+                priceTextField.requestFocus();
+            }
         }
+
     }
 
     private boolean allFieldsAreValid() {
         return !isSourceSameAsDestination() &&
                 cityHasMoreThanThreeLetters(sourceTextField.getText()) &&
                 cityHasMoreThanThreeLetters(destinationTextField.getText()) &&
-                isValidHourFormat(leaveHourTextField.getText()) &&
+                isValidHourFormat(departureHourTextField.getText()) &&
                 isValidHourFormat(durationTextField.getText()) &&
-                isPricePositive();
+                isPricePositiveNumber();
     }
 
     private boolean isSourceSameAsDestination() {
@@ -190,11 +220,37 @@ public class AddFlightPage extends JFrame {
         return string.length() >= 3;
     }
 
-    private boolean isPricePositive() {
-        return Integer.parseInt(priceTextField.getText()) > 0;
+    private boolean isPricePositiveNumber() {
+        String price = priceTextField.getText();
+        boolean result = false;
+
+        if (price.matches("^\\d+$")) {
+            int intPrice = Integer.parseInt(price);
+            if (intPrice > 0) {
+                result = true;
+            }
+        }
+        return result;
     }
 
     private boolean isValidHourFormat(String hour) {
         return hour.matches("^\\d+:\\d+$");
+    }
+
+    private boolean someFieldsAreEmpty() {
+        return sourceTextField.getText().isEmpty() || destinationTextField.getText().isEmpty() ||
+                departureHourTextField.getText().isEmpty() || durationTextField.getText().isEmpty() ||
+                priceTextField.getText().isEmpty();
+    }
+
+    private boolean noDaysSelected() {
+        boolean result = true;
+        for (JCheckBox box : daysCheckBox) {
+            if (box.isSelected()) {
+                result = false;
+                break;
+            }
+        }
+        return result;
     }
 }
