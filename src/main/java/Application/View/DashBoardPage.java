@@ -29,8 +29,6 @@ public class DashBoardPage extends JFrame {
 
     private void initContentPanel() {
         contentPanel = new JPanel();
-//        contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-//        contentPanel.setLayout(new FlowLayout());
         setContentPane(contentPanel);
     }
 

@@ -8,10 +8,10 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 public class Flight {
-    private String sursa;
-    private String destinatie;
-    private String oraPlecare;
-    private String durata;
-    private String zile;
-    private int pret;
+    private String source;
+    private String destination;
+    private String departureHour;
+    private String landingHour;
+    private String days;
+    private int price;
 }

@@ -1,9 +1,14 @@
 package Application.View;
 
+import Application.Controller.FlightController;
+import Application.Model.Flight;
+
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class AddFlightPage extends JFrame {
     private JLabel sourceLabel, destinationLabel, departureHourLabel, durationLabel, daysLabel, priceLabel;
@@ -12,6 +17,7 @@ public class AddFlightPage extends JFrame {
     private JButton addFlightButton, abortButton;
     private List<JCheckBox> daysCheckBox;
     private final Dimension TEXTFIELD_DIMENSIONS = new Dimension(200, 30);
+    private final FlightController flightController = new FlightController();
 
     public AddFlightPage() {
         initSourcePanel();
@@ -89,7 +95,7 @@ public class AddFlightPage extends JFrame {
         durationPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         //Label
-        durationLabel = new JLabel("Duration: ");
+        durationLabel = new JLabel("Duration(HH:mm): ");
 
         //text field
         durationTextField = new JTextField();
@@ -106,7 +112,7 @@ public class AddFlightPage extends JFrame {
         departureHourPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         //Label
-        departureHourLabel = new JLabel("Departure hour: ");
+        departureHourLabel = new JLabel("Departure hour(HH:mm): ");
 
         //text field
         departureHourTextField = new JTextField();
@@ -163,19 +169,29 @@ public class AddFlightPage extends JFrame {
         setVisible(true);
     }
 
-    public void addFlight() {
+    private void addFlight() {
         String source = sourceTextField.getText();
         String destination = destinationTextField.getText();
-        String departureHour = departureHourTextField.getText();
+        String departureHour = checkAndFormatTime(departureHourTextField.getText());
         String duration = durationTextField.getText();
+        String price = priceTextField.getText();
 
 
         if (someFieldsAreEmpty()) {
             JOptionPane.showMessageDialog(null, "Please complete all fields");
         } else {
             if (allFieldsAreValid()) {
-                JOptionPane.showConfirmDialog(null, "GG");
-                //TODO add to datablase
+                String landingHour = calculateLandingHour();
+                int intPrice = Integer.parseInt(price);
+                String days = checkedDaysToString();
+
+                Flight flight = new Flight(source, destination, departureHour, landingHour, days, intPrice);
+
+                flightController.insertFlight(flight);
+
+                JOptionPane.showMessageDialog(null, "Flight was added to database");
+                dispose();
+
             } else if (noDaysSelected()) {
                 JOptionPane.showMessageDialog(null, "You must select at least one day");
             } else if (!cityHasMoreThanThreeLetters(source)) {
@@ -188,10 +204,10 @@ public class AddFlightPage extends JFrame {
                 JOptionPane.showMessageDialog(null, "Source and destination can't be the same");
                 sourceTextField.requestFocus();
             } else if (!isValidHourFormat(departureHour)) {
-                JOptionPane.showMessageDialog(null, "Departure field hour needs to have Hours:Minutes format");
+                JOptionPane.showMessageDialog(null, "Departure field hour needs to have HH:mm(0-23:00-59) format");
                 departureHourTextField.requestFocus();
             } else if (!isValidHourFormat(duration)) {
-                JOptionPane.showMessageDialog(null, "Duration field needs to have Hours:Minutes format");
+                JOptionPane.showMessageDialog(null, "Duration field needs to have HH:mm(0-23:00-59) format");
                 durationTextField.requestFocus();
             } else if (!isPricePositiveNumber()) {
                 JOptionPane.showMessageDialog(null, "Price value must be a number more than 0");
@@ -201,13 +217,59 @@ public class AddFlightPage extends JFrame {
 
     }
 
+    private String checkedDaysToString() {
+        StringJoiner stringJoiner = new StringJoiner(", ");
+        for (JCheckBox box : daysCheckBox) {
+            if (box.isSelected()) {
+                stringJoiner.add(box.getText());
+            }
+        }
+        return stringJoiner.toString();
+    }
+
+    private String calculateLandingHour() {
+        String departureHour = departureHourTextField.getText();
+        String duration = durationTextField.getText();
+
+        departureHour = checkAndFormatTime(departureHour);
+        duration = checkAndFormatTime(duration);
+
+        LocalTime departureTime = LocalTime.parse(departureHour);
+        LocalTime durationTime = LocalTime.parse(duration);
+
+        int hourDuration = durationTime.getHour();
+        int minutesDuration = durationTime.getMinute();
+
+        LocalTime landingTime;
+        landingTime = departureTime.plusHours(hourDuration).plusMinutes(minutesDuration);
+        return landingTime.toString();
+    }
+
+    private String checkAndFormatTime(String time) {
+        if (time.length() == 5) {
+            return time;
+        } else {
+            String[] split = time.split(":");
+            StringJoiner stringJoiner = new StringJoiner(":");
+
+            for (String component : split) {
+                if (component.length() < 2) {
+                    stringJoiner.add("0" + component);
+                } else {
+                    stringJoiner.add(component);
+                }
+            }
+            return stringJoiner.toString();
+        }
+    }
+
     private boolean allFieldsAreValid() {
         return !isSourceSameAsDestination() &&
                 cityHasMoreThanThreeLetters(sourceTextField.getText()) &&
                 cityHasMoreThanThreeLetters(destinationTextField.getText()) &&
                 isValidHourFormat(departureHourTextField.getText()) &&
                 isValidHourFormat(durationTextField.getText()) &&
-                isPricePositiveNumber();
+                isPricePositiveNumber() && !noDaysSelected();
     }
 
     private boolean isSourceSameAsDestination() {
@@ -234,7 +296,7 @@ public class AddFlightPage extends JFrame {
     }
 
     private boolean isValidHourFormat(String hour) {
-        return hour.matches("^\\d+:\\d+$");
+        return hour.matches("^(2[0-3]|1[0-9]|[0-9]|0[0-9]):(5[0-9]|4[0-9]|3[0-9]|2[0-9]|1[0-9]|[0-9]|0[0-9])$");
     }
 
     private boolean someFieldsAreEmpty() {
