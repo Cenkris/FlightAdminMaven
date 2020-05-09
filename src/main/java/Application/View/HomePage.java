@@ -51,10 +51,6 @@ public class HomePage extends JPanel {
         add(buttonPannel);
     }
 
-    private void addRow() {
-
-    }
-
     private void initTablePanel() {
         Object[][] data = {{deleteFlightButton, "Bucuresti", "Londra", "7:40", "10:25", "Luni, Marti, Joi", "1040"},
                 {deleteFlightButton, "Londra", "Bucuresti", "13:05", "15:40", "Marti, Sambata", "965"}};
@@ -156,8 +152,7 @@ public class HomePage extends JPanel {
     }
 
     private void addRowsToTable(Object[][] data) {
-        flightTableModel.addRow(data[0]);
-        flightTableModel.addRow(data[1]);
+
     }
 
     private void setColumnNames() {

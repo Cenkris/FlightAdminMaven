@@ -7,8 +7,11 @@ import lombok.*;
 @Setter
 @ToString
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class Flight {
+    @NonNull
     private String source;
+    @NonNull
     private String destination;
     private String departureHour;
     private String landingHour;

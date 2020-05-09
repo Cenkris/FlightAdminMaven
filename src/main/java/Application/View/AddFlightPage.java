@@ -190,7 +190,7 @@ public class AddFlightPage extends JFrame {
                 flightController.insertFlight(flight);
 
                 JOptionPane.showMessageDialog(null, "Flight was added to database");
-                dispose();
+//                dispose();
 
             } else if (noDaysSelected()) {
                 JOptionPane.showMessageDialog(null, "You must select at least one day");
@@ -203,6 +203,9 @@ public class AddFlightPage extends JFrame {
             } else if (isSourceSameAsDestination()) {
                 JOptionPane.showMessageDialog(null, "Source and destination can't be the same");
                 sourceTextField.requestFocus();
+            } else if (flightAlreadyExists(source, destination)) {
+                JOptionPane.showMessageDialog(null, "Flight route already in db");
+                destinationTextField.requestFocus();
             } else if (!isValidHourFormat(departureHour)) {
                 JOptionPane.showMessageDialog(null, "Departure field hour needs to have HH:mm(0-23:00-59) format");
                 departureHourTextField.requestFocus();
@@ -215,6 +218,11 @@ public class AddFlightPage extends JFrame {
             }
         }
 
+    }
+
+    private boolean flightAlreadyExists(String source, String destination) {
+        Flight flight = new Flight(source, destination);
+        return flightController.flightAlreadyExists(flight);
     }
 
     private String checkedDaysToString() {
@@ -269,7 +277,7 @@ public class AddFlightPage extends JFrame {
                 cityHasMoreThanThreeLetters(destinationTextField.getText()) &&
                 isValidHourFormat(departureHourTextField.getText()) &&
                 isValidHourFormat(durationTextField.getText()) &&
-                isPricePositiveNumber() && !noDaysSelected();
+                isPricePositiveNumber() && !noDaysSelected() && !flightAlreadyExists(sourceTextField.getText(),destinationTextField.getText());
     }
 
     private boolean isSourceSameAsDestination() {
