@@ -30,4 +30,8 @@ public class FlightController {
     public List<Flight> getAllFlights() {
         return flightDAO.selectAllFlights();
     }
+
+    public Flight getLastInsertedFlight(){
+        return flightDAO.selectLastInsertedFlight();
+    }
 }

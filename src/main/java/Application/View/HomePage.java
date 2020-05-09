@@ -1,5 +1,7 @@
 package Application.View;
 
+import Application.Controller.FlightController;
+import Application.Model.Flight;
 import Application.Model.TableRenderer;
 
 import javax.swing.*;
@@ -7,9 +9,12 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 
 public class HomePage extends JPanel {
     private JLabel clockLabel;
@@ -19,6 +24,7 @@ public class HomePage extends JPanel {
     private String[] colNames = {"", "Sursa", "Destinatie", "Ora Plecare", "Ora Sosire", "Zile", "Pret"};
     private final int xAxisDimension = 600;
     private DefaultTableModel flightTableModel;
+    private final FlightController flightController = new FlightController();
 
 
     public HomePage() {
@@ -27,6 +33,7 @@ public class HomePage extends JPanel {
         initDeleteFlightButton();
         initTablePanel();
         initAddFlightButton();
+        setName("HomePage");
     }
 
     private void initDeleteFlightButton() {
@@ -38,22 +45,26 @@ public class HomePage extends JPanel {
     private void initAddFlightButton() {
 
 
-        JPanel buttonPannel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         addFlightButton = new JButton("Add Flight");
         addFlightButton.setPreferredSize(new Dimension(xAxisDimension, 30));
         addFlightButton.addActionListener(event -> {
             AddFlightPage addFlightPage = new AddFlightPage();
+            addFlightPage.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    updateTable();
+                }
+            });
             addFlightPage.setVisible(true);
         });
 
         //add component
-        buttonPannel.add(addFlightButton);
-        add(buttonPannel);
+        buttonPanel.add(addFlightButton);
+        add(buttonPanel);
     }
 
     private void initTablePanel() {
-        Object[][] data = {{deleteFlightButton, "Bucuresti", "Londra", "7:40", "10:25", "Luni, Marti, Joi", "1040"},
-                {deleteFlightButton, "Londra", "Bucuresti", "13:05", "15:40", "Marti, Sambata", "965"}};
 
         initTableModel();
         fligthTable = new JTable(flightTableModel);
@@ -69,8 +80,12 @@ public class HomePage extends JPanel {
                                 "Are you sure you want to delete the flight corresponding to this row?",
                                 "Delete Flight", JOptionPane.YES_NO_OPTION);
                         if (answer == JOptionPane.YES_OPTION) {
+                            String source = fligthTable.getValueAt(selectedRow, 1).toString();
+                            String destination = flightTableModel.getValueAt(selectedRow, 2).toString();
+                            Flight flight = new Flight(source, destination);
+
+                            flightController.removeFlight(flight);
                             flightTableModel.removeRow(selectedRow);
-                            //TODO: delete database info
                         }
                     }
 
@@ -81,7 +96,7 @@ public class HomePage extends JPanel {
         fligthTable.addMouseListener(deleteMouseAdapter);
 
         setColumnNames();
-        addRowsToTable(data);
+        addRowsToTable();
         setTableColumnPreferences();
 
         initTableCellRenderer();
@@ -148,11 +163,41 @@ public class HomePage extends JPanel {
 
         };
 
+    }
+
+    public void updateTable() {
+
+        String source = fligthTable.getValueAt(flightTableModel.getRowCount() - 1, 1).toString();
+        String destination = flightTableModel.getValueAt(flightTableModel.getRowCount() - 1, 2).toString();
+        Flight flight = flightController.getLastInsertedFlight();
+        Object[] row = constructRow(flight);
+
+        if (!flight.getSource().equals(source) || !flight.getDestination().equals(destination)) {
+            flightTableModel.addRow(row);
+            revalidate();
+            repaint();
+        }
 
     }
 
-    private void addRowsToTable(Object[][] data) {
+    private Object[] constructRow(Flight flight) {
+        return new Object[]{
+                deleteFlightButton,
+                flight.getSource(),
+                flight.getDestination(),
+                flight.getDepartureHour(),
+                flight.getLandingHour(),
+                flight.getDays(),
+                flight.getPrice()
+        };
+    }
 
+    private void addRowsToTable() {
+        List<Flight> allFlights = flightController.getAllFlights();
+        for (Flight flight : allFlights) {
+            Object[] row = constructRow(flight);
+            flightTableModel.addRow(row);
+        }
     }
 
     private void setColumnNames() {

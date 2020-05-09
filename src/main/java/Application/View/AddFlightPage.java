@@ -18,6 +18,7 @@ public class AddFlightPage extends JFrame {
     private List<JCheckBox> daysCheckBox;
     private final Dimension TEXTFIELD_DIMENSIONS = new Dimension(200, 30);
     private final FlightController flightController = new FlightController();
+    private HomePage homePage;
 
     public AddFlightPage() {
         initSourcePanel();
@@ -190,7 +191,7 @@ public class AddFlightPage extends JFrame {
                 flightController.insertFlight(flight);
 
                 JOptionPane.showMessageDialog(null, "Flight was added to database");
-//                dispose();
+                dispose();
 
             } else if (noDaysSelected()) {
                 JOptionPane.showMessageDialog(null, "You must select at least one day");
@@ -277,7 +278,7 @@ public class AddFlightPage extends JFrame {
                 cityHasMoreThanThreeLetters(destinationTextField.getText()) &&
                 isValidHourFormat(departureHourTextField.getText()) &&
                 isValidHourFormat(durationTextField.getText()) &&
-                isPricePositiveNumber() && !noDaysSelected() && !flightAlreadyExists(sourceTextField.getText(),destinationTextField.getText());
+                isPricePositiveNumber() && !noDaysSelected() && !flightAlreadyExists(sourceTextField.getText(), destinationTextField.getText());
     }
 
     private boolean isSourceSameAsDestination() {

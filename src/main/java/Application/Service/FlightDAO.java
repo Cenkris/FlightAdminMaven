@@ -13,7 +13,7 @@ import java.util.List;
 public class FlightDAO {
 
     private PreparedStatement insertQuery;
-    private PreparedStatement selectSameRouteQuery, selectAllFlightsQuery;
+    private PreparedStatement selectSameRouteQuery, selectAllFlightsQuery, selectLastFlightQuery;
     private PreparedStatement removeFlightQuery;
 
     public FlightDAO(Connection connection) {
@@ -22,6 +22,7 @@ public class FlightDAO {
             selectSameRouteQuery = connection.prepareStatement("SELECT * FROM flights WHERE source = ? AND destination = ?");
             removeFlightQuery = connection.prepareStatement("DELETE FROM flights WHERE source = ? AND destination = ?");
             selectAllFlightsQuery = connection.prepareStatement("SELECT * FROM flights");
+            selectLastFlightQuery = connection.prepareStatement("SELECT * FROM flights WHERE id=(SELECT MAX(id) FROM flights)");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -46,7 +47,6 @@ public class FlightDAO {
             selectSameRouteQuery.setString(1, flight.getSource());
             selectSameRouteQuery.setString(2, flight.getDestination());
             ResultSet resultSet = selectSameRouteQuery.executeQuery();
-            System.out.println(resultSet.next());
             return resultSet.next();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -82,5 +82,28 @@ public class FlightDAO {
             throwables.printStackTrace();
         }
         return Collections.emptyList();
+    }
+
+    public Flight selectLastInsertedFlight() {
+        Flight lastFlight = new Flight();
+        ResultSet result = null;
+        try {
+            result = selectLastFlightQuery.executeQuery();
+            while (result.next()) {
+                lastFlight = new Flight(
+                        result.getString("source"),
+                        result.getString("destination"),
+                        result.getString("departure_hour"),
+                        result.getString("landing_hour"),
+                        result.getString("days"),
+                        result.getInt("price"));
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
+        return lastFlight;
     }
 }

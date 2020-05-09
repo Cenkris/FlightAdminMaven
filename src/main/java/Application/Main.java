@@ -6,6 +6,6 @@ import Application.View.StartPage;
 
 public class Main {
     public static void main(String[] args) {
-        AddFlightPage startPage = new AddFlightPage();
+        StartPage startPage = new StartPage();
     }
 }
