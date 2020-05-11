@@ -10,7 +10,7 @@ public class DashBoardPage extends JFrame {
     private JPanel contentPanel;
     private JMenuBar menuBar;
     private JMenu optionsMenu;
-    private JMenuItem homeMenuItem, accountMenuItem, logOutMenuItem;
+    private JMenuItem homeMenuItem, accountMenuItem, logOutMenuItem, aboutMenuItem;
 
     public DashBoardPage() {
         initContentPanel();
@@ -33,6 +33,17 @@ public class DashBoardPage extends JFrame {
     }
 
     private void initOptionsMenu() {
+        //aboutItem
+        aboutMenuItem = new JMenuItem("About");
+        MouseAdapter onClickAboutMouseAdapter = new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                AboutPage aboutPage = new AboutPage();
+                aboutPage.setVisible(true);
+            }
+        };
+        aboutMenuItem.addMouseListener(onClickAboutMouseAdapter);
+
         //homeItem
         homeMenuItem = new JMenuItem("Home");
         MouseAdapter onClickHomeMouseAdapter = new MouseAdapter() {
@@ -67,6 +78,7 @@ public class DashBoardPage extends JFrame {
 
         //options menu
         optionsMenu = new JMenu("Options");
+        optionsMenu.add(aboutMenuItem);
         optionsMenu.add(homeMenuItem);
         optionsMenu.add(accountMenuItem);
         optionsMenu.add(logOutMenuItem);
