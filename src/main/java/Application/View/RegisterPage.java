@@ -1,5 +1,6 @@
 package Application.View;
 
+import Application.Controller.AuditController;
 import Application.Controller.UserController;
 import Application.Model.Audit;
 import Application.Model.User;
@@ -51,7 +52,7 @@ public class RegisterPage extends JFrame {
             userController.insertUser(user);
 
             //audit
-            userController.saveEvent(user, Audit.REGISTER);
+            AuditController.saveEvent(user, Audit.REGISTER);
 
             LoginPage loginPage = new LoginPage();
             loginPage.setVisible(true);

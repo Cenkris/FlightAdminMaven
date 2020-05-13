@@ -1,6 +1,6 @@
 package Application.View;
 
-import Application.Controller.UserController;
+import Application.Controller.AuditController;
 import Application.Model.Audit;
 import Audit.UserAudit;
 
@@ -18,7 +18,6 @@ public class DashBoardPage extends JFrame {
     private JMenuBar menuBar;
     private JMenu optionsMenu;
     private JMenuItem homeMenuItem, accountMenuItem, logOutMenuItem, aboutMenuItem;
-    private final UserController userController = new UserController();
 
     public DashBoardPage() {
         initContentPanel();
@@ -28,16 +27,16 @@ public class DashBoardPage extends JFrame {
     }
 
     private void switchPane(JPanel panel) {
-        String lastAction = userController.getLastActionName();
+        String lastAction = AuditController.getLastActionName();
         String componentName = "";
 
 
         if (panel instanceof AccountPage) {
             if (!lastAction.equals(Audit.ACCOUNT.toString()))
-                userController.saveEvent(UserAudit.getLoggedUser(), Audit.ACCOUNT);
+                AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.ACCOUNT);
         } else {
             if (!lastAction.equals(Audit.HOME.toString()))
-                userController.saveEvent(UserAudit.getLoggedUser(), Audit.HOME);
+                AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.HOME);
         }
 
         Component[] components = contentPanel.getComponents();
@@ -98,7 +97,7 @@ public class DashBoardPage extends JFrame {
             public void mousePressed(MouseEvent e) {
                 LoginPage loginPage = new LoginPage();
                 loginPage.setVisible(true);
-                userController.saveEvent(UserAudit.getLoggedUser(), Audit.LOGOUT);
+                AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.LOGOUT);
                 dispose();
             }
         };
@@ -121,8 +120,8 @@ public class DashBoardPage extends JFrame {
         WindowAdapter windowAdapter = new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if (!userController.isLastAction(Audit.LOGOUT)) {
-                    userController.saveEvent(UserAudit.getLoggedUser(), Audit.LOGOUT);
+                if (!AuditController.isLastAction(Audit.LOGOUT)) {
+                    AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.LOGOUT);
                 }
             }
         };

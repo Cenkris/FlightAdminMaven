@@ -3,9 +3,12 @@ package Application.View;
 import Application.Model.Audit;
 
 import javax.swing.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class AccountHistoryPage extends JFrame {
     private JLabel textLabel;
+    private Deque<String> auditActions = new ArrayDeque<>();
 
     AccountHistoryPage() {
         initText();

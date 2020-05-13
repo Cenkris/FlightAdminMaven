@@ -16,23 +16,16 @@ public class UserDAO {
     private PreparedStatement insertQuery;
     private PreparedStatement selectUserByNameQuery, selectUserByEmailQuery;
     private PreparedStatement updateUsernameQuery, updateEmailQuery, updatePasswordQuery;
-    private PreparedStatement insertAuditQuery;
-    private PreparedStatement selectLastEntryQuery;
+
 
     public UserDAO(Connection connection) {
         try {
-            //users table
             insertQuery = connection.prepareStatement("INSERT INTO users VALUES (null, ?, ?, ?)");
             selectUserByNameQuery = connection.prepareStatement("SELECT * FROM users WHERE username = ?");
             selectUserByEmailQuery = connection.prepareStatement("SELECT * FROM users WHERE email = ?");
             updateUsernameQuery = connection.prepareStatement("UPDATE users SET username = ? WHERE username = ?");
             updateEmailQuery = connection.prepareStatement("UPDATE users SET email = ? WHERE email = ?");
             updatePasswordQuery = connection.prepareStatement("UPDATE users SET password = ? WHERE username = ?");
-
-
-            //audit table
-            insertAuditQuery = connection.prepareStatement("INSERT INTO audit VALUES (null, ?, ?, ?)");
-            selectLastEntryQuery = connection.prepareStatement("SELECT * FROM audit WHERE id=(SELECT MAX(id) FROM audit)");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -109,36 +102,6 @@ public class UserDAO {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-    }
-
-    public void saveEvent(User user, Audit audit) {
-        try {
-            insertAuditQuery.setString(1, user.getUsername());
-            insertAuditQuery.setString(2, audit.toString());
-
-            Date date = Date.from(Instant.now());
-            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-
-            insertAuditQuery.setString(3, formatter.format(date));
-            insertAuditQuery.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
-    public String getLastEntryInAudit() {
-        ResultSet result;
-        String resultAction = "";
-        try {
-            result = selectLastEntryQuery.executeQuery();
-            while (result.next()) {
-                resultAction = result.getString("action");
-            }
-            return resultAction;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return resultAction;
     }
 }
 

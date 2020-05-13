@@ -1,5 +1,6 @@
 package Application.View;
 
+import Application.Controller.AuditController;
 import Application.Controller.FlightController;
 import Application.Controller.UserController;
 import Application.Model.Audit;
@@ -192,7 +193,7 @@ public class AddFlightPage extends JFrame {
                 Flight flight = new Flight(source, destination, departureHour, landingHour, days, intPrice);
 
                 flightController.insertFlight(flight);
-                userController.saveEvent(UserAudit.getLoggedUser(), Audit.ADD_FLIGHT);
+                AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.ADD_FLIGHT);
 
                 JOptionPane.showMessageDialog(null, "Flight was added to database");
                 dispose();

@@ -1,6 +1,5 @@
 package Application.Controller;
 
-import Application.Model.Audit;
 import Application.Model.User;
 import Application.Service.UserDAO;
 import DataBase.DatabaseConnection;
@@ -47,15 +46,4 @@ public class UserController {
         userDAO.updatePassword(user, password);
     }
 
-    public void saveEvent(User user, Audit audit) {
-        userDAO.saveEvent(user, audit);
-    }
-
-    public String getLastActionName() {
-        return userDAO.getLastEntryInAudit();
-    }
-
-    public boolean isLastAction(Audit audit) {
-        return userDAO.getLastEntryInAudit().equals(audit.toString());
-    }
 }

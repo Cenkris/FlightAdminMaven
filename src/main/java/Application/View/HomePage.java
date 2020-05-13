@@ -1,5 +1,6 @@
 package Application.View;
 
+import Application.Controller.AuditController;
 import Application.Controller.FlightController;
 import Application.Controller.UserController;
 import Application.Model.Audit;
@@ -91,7 +92,7 @@ public class HomePage extends JPanel {
                             String source = fligthTable.getValueAt(selectedRow, 1).toString();
                             String destination = flightTableModel.getValueAt(selectedRow, 2).toString();
                             Flight flight = new Flight(source, destination);
-                            userController.saveEvent(UserAudit.getLoggedUser(), Audit.REMOVE_FLIGHT);
+                            AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.REMOVE_FLIGHT);
                             flightController.removeFlight(flight);
                             flightTableModel.removeRow(selectedRow);
                         }

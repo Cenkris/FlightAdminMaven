@@ -1,5 +1,6 @@
 package Application.View;
 
+import Application.Controller.AuditController;
 import Application.Controller.UserController;
 import Application.Model.Audit;
 import Audit.UserAudit;
@@ -51,8 +52,8 @@ public class ChangePasswordPage extends JFrame {
             dispose();
             JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(accountPage);
             topFrame.dispose();
-            userController.saveEvent(UserAudit.getLoggedUser(), Audit.PASSWORD_CHANGED);
-            userController.saveEvent(UserAudit.getLoggedUser(), Audit.LOGOUT);
+            AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.PASSWORD_CHANGED);
+            AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.LOGOUT);
             LoginPage loginPage = new LoginPage();
             loginPage.setVisible(true);
         } else if (password.isEmpty() || confirmPassword.isEmpty()) {
