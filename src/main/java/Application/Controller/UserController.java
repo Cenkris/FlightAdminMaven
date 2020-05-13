@@ -1,5 +1,6 @@
 package Application.Controller;
 
+import Application.Model.Audit;
 import Application.Model.User;
 import Application.Service.UserDAO;
 import DataBase.DatabaseConnection;
@@ -44,5 +45,9 @@ public class UserController {
 
     public void updatePassword(User user, String password) {
         userDAO.updatePassword(user, password);
+    }
+
+    public void saveEvent(User user, Audit audit){
+//        userDAO.saveEvent(user,audit);
     }
 }

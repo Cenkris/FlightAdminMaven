@@ -1,8 +1,11 @@
 package Application.View;
 
 import Application.Controller.FlightController;
+import Application.Controller.UserController;
+import Application.Model.Audit;
 import Application.Model.Flight;
 import Application.Model.TableRenderer;
+import Audit.UserAudit;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -25,9 +28,11 @@ public class HomePage extends JPanel {
     private final int xAxisDimension = 600;
     private DefaultTableModel flightTableModel;
     private final FlightController flightController = new FlightController();
+    private final UserController userController = new UserController();
 
 
     public HomePage() {
+        userController.saveEvent(UserAudit.getLoggedUser(), Audit.HOME);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         initClock();
         initDeleteFlightButton();

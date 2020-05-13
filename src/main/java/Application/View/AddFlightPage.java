@@ -1,7 +1,10 @@
 package Application.View;
 
 import Application.Controller.FlightController;
+import Application.Controller.UserController;
+import Application.Model.Audit;
 import Application.Model.Flight;
+import Audit.UserAudit;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +21,7 @@ public class AddFlightPage extends JFrame {
     private List<JCheckBox> daysCheckBox;
     private final Dimension TEXTFIELD_DIMENSIONS = new Dimension(200, 30);
     private final FlightController flightController = new FlightController();
+    private final UserController userController = new UserController();
 
     public AddFlightPage() {
         initSourcePanel();
@@ -159,6 +163,7 @@ public class AddFlightPage extends JFrame {
     }
 
     private void initDefaultValues() {
+        userController.saveEvent(UserAudit.getLoggedUser(), Audit.ADD_FLIGHT);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
         setTitle("Add Flight");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

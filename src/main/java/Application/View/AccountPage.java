@@ -1,6 +1,7 @@
 package Application.View;
 
 import Application.Controller.UserController;
+import Application.Model.Audit;
 import Application.Model.User;
 import Audit.UserAudit;
 import Helper.AccountConstraints;
@@ -15,7 +16,6 @@ public class AccountPage extends JPanel {
     //Swing
     private JLabel welcomeMessageLabel;
     private User loggedUser = UserAudit.getLoggedUser();
-    //            new User("marcel", "pass", "v@yahoo.com"); //TODO: replace with UserAudit.getLoggedUser();
     private JButton changeUsernameButton, changeEmailButton, changePasswordButton, showHistoryButton;
     private JTextField newEmailTextField, newUsernameTextField;
     private JPanel newEmailPanel, newUsernamePanel;
@@ -27,6 +27,7 @@ public class AccountPage extends JPanel {
 
 
     public AccountPage() {
+        userController.saveEvent(UserAudit.getLoggedUser(), Audit.ACCOUNT);
         setLayout(new GridLayout(4, 1));
         writeMessage();
         initWelcomeMessage();
@@ -52,9 +53,10 @@ public class AccountPage extends JPanel {
         //show history button
         showHistoryButton = new JButton("Show Account History");
         showHistoryButton.setPreferredSize(TEXT_FIELD_DIMENSION);
-        showHistoryButton.addActionListener(event ->{
+        showHistoryButton.addActionListener(event -> {
             AccountHistoryPage accountHistoryPage = new AccountHistoryPage();
             accountHistoryPage.setVisible(true);
+            userController.saveEvent(UserAudit.getLoggedUser(), Audit.AUDIT);
         });
 
         //add components
@@ -104,6 +106,7 @@ public class AccountPage extends JPanel {
             newEmailTextField.setText("");
             UserAudit.loggedUser = userController.getUserByEmail(inputEmail);
             loggedUser = UserAudit.getLoggedUser();
+            userController.saveEvent(loggedUser, Audit.EMAIL_CHANGED);
             writeMessage();
             welcomeMessageLabel.setText(welcomeMessage);
             int messageLengthDimension = getWelcomeMessageLength();
@@ -175,6 +178,7 @@ public class AccountPage extends JPanel {
             newUsernameTextField.setText("");
             UserAudit.loggedUser = userController.getUserByUsername(inputUsername);
             loggedUser = UserAudit.getLoggedUser();
+            userController.saveEvent(loggedUser, Audit.USERNAME_CHANGED);
             writeMessage();
             welcomeMessageLabel.setText(welcomeMessage);
         } else if (inputUsername.isEmpty()) {

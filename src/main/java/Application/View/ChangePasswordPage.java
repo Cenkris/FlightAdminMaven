@@ -1,6 +1,7 @@
 package Application.View;
 
 import Application.Controller.UserController;
+import Application.Model.Audit;
 import Audit.UserAudit;
 import Helper.AccountConstraints;
 
@@ -50,6 +51,8 @@ public class ChangePasswordPage extends JFrame {
             dispose();
             JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(accountPage);
             topFrame.dispose();
+            userController.saveEvent(UserAudit.getLoggedUser(), Audit.PASSWORD_CHANGED);
+            userController.saveEvent(UserAudit.getLoggedUser(), Audit.LOGOUT);
             LoginPage loginPage = new LoginPage();
             loginPage.setVisible(true);
         } else if (password.isEmpty() || confirmPassword.isEmpty()) {

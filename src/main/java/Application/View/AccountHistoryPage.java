@@ -1,11 +1,22 @@
 package Application.View;
 
+import Application.Model.Audit;
+
 import javax.swing.*;
 
 public class AccountHistoryPage extends JFrame {
+    private JLabel textLabel;
 
     AccountHistoryPage() {
+        initText();
         initDefaultValues();
+    }
+
+    private void initText() {
+        textLabel = new JLabel();
+
+        //add component
+        add(textLabel);
     }
 
 

@@ -1,6 +1,7 @@
 package Application.View;
 
 import Application.Controller.UserController;
+import Application.Model.Audit;
 import Application.Model.User;
 import Audit.UserAudit;
 
@@ -70,6 +71,7 @@ public class LoginPage extends JFrame {
             if (userPassword.equals(inputPassword)) {
                 UserAudit.loggedUser = user;
                 DashBoardPage dashBoardPage = new DashBoardPage();
+                userController.saveEvent(UserAudit.getLoggedUser(), Audit.LOGIN);
                 dashBoardPage.setVisible(true);
                 dispose();
             } else {

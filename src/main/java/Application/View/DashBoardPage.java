@@ -1,5 +1,9 @@
 package Application.View;
 
+import Application.Controller.UserController;
+import Application.Model.Audit;
+import Audit.UserAudit;
+
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -11,6 +15,7 @@ public class DashBoardPage extends JFrame {
     private JMenuBar menuBar;
     private JMenu optionsMenu;
     private JMenuItem homeMenuItem, accountMenuItem, logOutMenuItem, aboutMenuItem;
+    private final UserController userController = new UserController();
 
     public DashBoardPage() {
         initContentPanel();
@@ -71,6 +76,7 @@ public class DashBoardPage extends JFrame {
             public void mousePressed(MouseEvent e) {
                 LoginPage loginPage = new LoginPage();
                 loginPage.setVisible(true);
+                userController.saveEvent(UserAudit.getLoggedUser(), Audit.LOGOUT);
                 dispose();
             }
         };
@@ -90,14 +96,12 @@ public class DashBoardPage extends JFrame {
     }
 
     private void initDefaultValues() {
-//        setLayout(new GridLayout(2, 1));
         setName("DashBoard");
         setTitle("DashBoard Page");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(900, 500);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true); //TODO: Delete after testing dashboard
         setResizable(false);
     }
 }

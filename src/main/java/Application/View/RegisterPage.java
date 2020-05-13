@@ -1,6 +1,7 @@
 package Application.View;
 
 import Application.Controller.UserController;
+import Application.Model.Audit;
 import Application.Model.User;
 import Helper.AccountConstraints;
 
@@ -48,6 +49,10 @@ public class RegisterPage extends JFrame {
         if (allFieldsValid()) {
             User user = new User(username, password, email);
             userController.insertUser(user);
+
+            //audit
+            userController.saveEvent(user, Audit.REGISTER);
+
             LoginPage loginPage = new LoginPage();
             loginPage.setVisible(true);
             dispose();
@@ -188,7 +193,7 @@ public class RegisterPage extends JFrame {
     }
 
     private void initDefaultValues() {
-        setLayout(new GridLayout(6,1));
+        setLayout(new GridLayout(6, 1));
         setTitle("Register Page");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 900);

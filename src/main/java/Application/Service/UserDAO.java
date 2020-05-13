@@ -1,5 +1,6 @@
 package Application.Service;
 
+import Application.Model.Audit;
 import Application.Model.User;
 
 import java.sql.Connection;
@@ -12,15 +13,20 @@ public class UserDAO {
     private PreparedStatement insertQuery;
     private PreparedStatement selectUserByNameQuery, selectUserByEmailQuery;
     private PreparedStatement updateUsernameQuery, updateEmailQuery, updatePasswordQuery;
+    private PreparedStatement insertAuditQuery;
 
     public UserDAO(Connection connection) {
         try {
+            //users table
             insertQuery = connection.prepareStatement("INSERT INTO users VALUES (null, ?, ?, ?)");
             selectUserByNameQuery = connection.prepareStatement("SELECT * FROM users WHERE username = ?");
             selectUserByEmailQuery = connection.prepareStatement("SELECT * FROM users WHERE email = ?");
             updateUsernameQuery = connection.prepareStatement("UPDATE users SET username = ? WHERE username = ?");
             updateEmailQuery = connection.prepareStatement("UPDATE users SET email = ? WHERE email = ?");
             updatePasswordQuery = connection.prepareStatement("UPDATE users SET password = ? WHERE username = ?");
+
+            //audit table
+            insertAuditQuery = connection.prepareStatement("INSERT INTO audit VALUES (null, ?, ?, ?)");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -94,6 +100,17 @@ public class UserDAO {
             updatePasswordQuery.setString(1, newPassword);
             updatePasswordQuery.setString(2, user.getUsername());
             updatePasswordQuery.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void saveEvent(User user, Audit audit, String time) {
+        try {
+            insertAuditQuery.setString(1, user.getUsername());
+            insertAuditQuery.setString(2, audit.toString());
+            insertAuditQuery.setString(3, time);
+            insertAuditQuery.execute();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
