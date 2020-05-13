@@ -16,7 +16,7 @@ public class AccountPage extends JPanel {
     private JLabel welcomeMessageLabel;
     private User loggedUser = UserAudit.getLoggedUser();
     //            new User("marcel", "pass", "v@yahoo.com"); //TODO: replace with UserAudit.getLoggedUser();
-    private JButton changeUsernameButton, changeEmailButton, changePasswordButton;
+    private JButton changeUsernameButton, changeEmailButton, changePasswordButton, showHistoryButton;
     private JTextField newEmailTextField, newUsernameTextField;
     private JPanel newEmailPanel, newUsernamePanel;
     private final Dimension TEXT_FIELD_DIMENSION = new Dimension(200, 25);
@@ -32,17 +32,35 @@ public class AccountPage extends JPanel {
         initWelcomeMessage();
         initNewEmailPanel();
         initNewUsernamePanel();
-        initChangePasswordButton();
+        initChangePasswordAndHistoryButton();
     }
 
-    private void initChangePasswordButton() {
+    private void initChangePasswordAndHistoryButton() {
+        //panel
+        JPanel passwordAndHistoryPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+
+        // change password button
         changePasswordButton = new JButton("Change Password");
-        changePasswordButton.addActionListener(event->{
+        changePasswordButton.setPreferredSize(BUTTON_FIELD_DIMENSION);
+        changePasswordButton.addActionListener(event -> {
             ChangePasswordPage changePasswordPage = new ChangePasswordPage();
             changePasswordPage.parent(this);
             changePasswordPage.setVisible(true);
         });
-        add(changePasswordButton);
+
+        //show history button
+        showHistoryButton = new JButton("Show Account History");
+        showHistoryButton.setPreferredSize(TEXT_FIELD_DIMENSION);
+        showHistoryButton.addActionListener(event ->{
+            AccountHistoryPage accountHistoryPage = new AccountHistoryPage();
+            accountHistoryPage.setVisible(true);
+        });
+
+        //add components
+        passwordAndHistoryPanel.add(changePasswordButton);
+        passwordAndHistoryPanel.add(showHistoryButton);
+        add(passwordAndHistoryPanel);
     }
 
     private void initNewUsernamePanel() {
@@ -88,6 +106,11 @@ public class AccountPage extends JPanel {
             loggedUser = UserAudit.getLoggedUser();
             writeMessage();
             welcomeMessageLabel.setText(welcomeMessage);
+            int messageLengthDimension = getWelcomeMessageLength();
+            welcomeMessageLabel.setPreferredSize(new Dimension(messageLengthDimension, 30));
+            repaint();
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            topFrame.pack();
 
         } else if (inputEmail.isEmpty()) {
 
@@ -107,6 +130,10 @@ public class AccountPage extends JPanel {
             newEmailTextField.setText("");
             newEmailTextField.requestFocus();
         }
+    }
+
+    private int getWelcomeMessageLength() {
+        return welcomeMessage.length() * 7;
     }
 
     private void initNewEmailPanel() {
@@ -169,7 +196,7 @@ public class AccountPage extends JPanel {
     private void initWelcomeMessage() {
 
         //calculations for text dimension
-        int messageLengthDimension = welcomeMessage.length() * 7;
+        int messageLengthDimension = getWelcomeMessageLength();
         Dimension textDimension = new Dimension(messageLengthDimension, 30);
 
         //Jlable props

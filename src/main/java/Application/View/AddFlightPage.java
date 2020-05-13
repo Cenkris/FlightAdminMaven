@@ -18,7 +18,6 @@ public class AddFlightPage extends JFrame {
     private List<JCheckBox> daysCheckBox;
     private final Dimension TEXTFIELD_DIMENSIONS = new Dimension(200, 30);
     private final FlightController flightController = new FlightController();
-    private HomePage homePage;
 
     public AddFlightPage() {
         initSourcePanel();

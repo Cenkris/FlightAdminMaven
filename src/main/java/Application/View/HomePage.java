@@ -110,6 +110,7 @@ public class HomePage extends JPanel {
     }
 
     private void setTableColumnPreferences() {
+
         TableColumnModel columnModel = fligthTable.getColumnModel();
         DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
         centerRender.setHorizontalAlignment(SwingConstants.CENTER);
