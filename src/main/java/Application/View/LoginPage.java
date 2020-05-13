@@ -70,8 +70,8 @@ public class LoginPage extends JFrame {
         if (!user.isEmpty()) {
             if (userPassword.equals(inputPassword)) {
                 UserAudit.loggedUser = user;
-                DashBoardPage dashBoardPage = new DashBoardPage();
                 userController.saveEvent(UserAudit.getLoggedUser(), Audit.LOGIN);
+                DashBoardPage dashBoardPage = new DashBoardPage();
                 dashBoardPage.setVisible(true);
                 dispose();
             } else {

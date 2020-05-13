@@ -5,8 +5,11 @@ import Application.Model.Audit;
 import Audit.UserAudit;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class DashBoardPage extends JFrame {
     private HomePage homePage = new HomePage();
@@ -25,11 +28,30 @@ public class DashBoardPage extends JFrame {
     }
 
     private void switchPane(JPanel panel) {
-        contentPanel.removeAll();
-        contentPanel.add(panel);
-        contentPanel.revalidate();
-        contentPanel.repaint();
-        pack();
+        String lastAction = userController.getLastActionName();
+        String componentName = "";
+
+
+        if (panel instanceof AccountPage) {
+            if (!lastAction.equals(Audit.ACCOUNT.toString()))
+                userController.saveEvent(UserAudit.getLoggedUser(), Audit.ACCOUNT);
+        } else {
+            if (!lastAction.equals(Audit.HOME.toString()))
+                userController.saveEvent(UserAudit.getLoggedUser(), Audit.HOME);
+        }
+
+        Component[] components = contentPanel.getComponents();
+        for (Component component : components) {
+            componentName = component.getName();
+        }
+
+        if (!componentName.equals(panel.getName())) {
+            contentPanel.removeAll();
+            contentPanel.add(panel);
+            contentPanel.revalidate();
+            contentPanel.repaint();
+            pack();
+        }
     }
 
     private void initContentPanel() {
@@ -96,6 +118,16 @@ public class DashBoardPage extends JFrame {
     }
 
     private void initDefaultValues() {
+        WindowAdapter windowAdapter = new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (!userController.isLastAction(Audit.LOGOUT)) {
+                    userController.saveEvent(UserAudit.getLoggedUser(), Audit.LOGOUT);
+                }
+            }
+        };
+
+        addWindowListener(windowAdapter);
         setName("DashBoard");
         setTitle("DashBoard Page");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

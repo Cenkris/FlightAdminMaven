@@ -32,12 +32,15 @@ public class HomePage extends JPanel {
 
 
     public HomePage() {
-        userController.saveEvent(UserAudit.getLoggedUser(), Audit.HOME);
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         initClock();
         initDeleteFlightButton();
         initTablePanel();
         initAddFlightButton();
+        initPanelDefaultValues();
+    }
+
+    private void initPanelDefaultValues() {
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setName("HomePage");
     }
 
@@ -88,7 +91,7 @@ public class HomePage extends JPanel {
                             String source = fligthTable.getValueAt(selectedRow, 1).toString();
                             String destination = flightTableModel.getValueAt(selectedRow, 2).toString();
                             Flight flight = new Flight(source, destination);
-
+                            userController.saveEvent(UserAudit.getLoggedUser(), Audit.REMOVE_FLIGHT);
                             flightController.removeFlight(flight);
                             flightTableModel.removeRow(selectedRow);
                         }
@@ -162,6 +165,7 @@ public class HomePage extends JPanel {
                 return false;
             }
 
+            @SuppressWarnings("rawtypes")
             @Override
             public Class getColumnClass(int column) {
                 return getValueAt(0, column).getClass();
@@ -223,6 +227,7 @@ public class HomePage extends JPanel {
         SwingWorker<String, Void> worker = new SwingWorker<>() {
             @Override
             protected String doInBackground() {
+                //noinspection InfiniteLoopStatement
                 while (true) {
                     Date date = Date.from(Instant.now());
                     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");

@@ -27,13 +27,17 @@ public class AccountPage extends JPanel {
 
 
     public AccountPage() {
-        userController.saveEvent(UserAudit.getLoggedUser(), Audit.ACCOUNT);
-        setLayout(new GridLayout(4, 1));
         writeMessage();
         initWelcomeMessage();
         initNewEmailPanel();
         initNewUsernamePanel();
         initChangePasswordAndHistoryButton();
+        initPanelDefaultValues();
+    }
+
+    private void initPanelDefaultValues() {
+        setLayout(new GridLayout(4, 1));
+        setName("AccountPage");
     }
 
     private void initChangePasswordAndHistoryButton() {

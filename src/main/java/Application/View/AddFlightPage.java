@@ -163,7 +163,6 @@ public class AddFlightPage extends JFrame {
     }
 
     private void initDefaultValues() {
-        userController.saveEvent(UserAudit.getLoggedUser(), Audit.ADD_FLIGHT);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
         setTitle("Add Flight");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -193,6 +192,7 @@ public class AddFlightPage extends JFrame {
                 Flight flight = new Flight(source, destination, departureHour, landingHour, days, intPrice);
 
                 flightController.insertFlight(flight);
+                userController.saveEvent(UserAudit.getLoggedUser(), Audit.ADD_FLIGHT);
 
                 JOptionPane.showMessageDialog(null, "Flight was added to database");
                 dispose();

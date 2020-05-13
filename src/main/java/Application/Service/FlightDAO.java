@@ -86,7 +86,7 @@ public class FlightDAO {
 
     public Flight selectLastInsertedFlight() {
         Flight lastFlight = new Flight();
-        ResultSet result = null;
+        ResultSet result;
         try {
             result = selectLastFlightQuery.executeQuery();
             while (result.next()) {
