@@ -22,7 +22,7 @@ public class FlightDAO {
             selectSameRouteQuery = connection.prepareStatement("SELECT * FROM flights WHERE source = ? AND destination = ?");
             removeFlightQuery = connection.prepareStatement("DELETE FROM flights WHERE source = ? AND destination = ?");
             selectAllFlightsQuery = connection.prepareStatement("SELECT * FROM flights");
-            selectLastFlightQuery = connection.prepareStatement("SELECT * FROM flights WHERE id=(SELECT MAX(id) FROM flights)");
+            selectLastFlightQuery = connection.prepareStatement("SELECT * FROM flights WHERE id = (SELECT MAX(id) FROM flights)");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

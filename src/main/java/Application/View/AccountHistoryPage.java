@@ -1,22 +1,43 @@
 package Application.View;
 
-import Application.Model.Audit;
+import Application.Controller.AuditController;
+import Application.Model.AuditEvent;
+import Helper.LoggedUser;
 
 import javax.swing.*;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.List;
 
 public class AccountHistoryPage extends JFrame {
     private JLabel textLabel;
-    private Deque<String> auditActions = new ArrayDeque<>();
+    private String messageToDisplay;
 
     AccountHistoryPage() {
-        initText();
+        initMessage();
+        initTextLabel();
         initDefaultValues();
     }
 
-    private void initText() {
-        textLabel = new JLabel();
+    private void initMessage() {
+        List<AuditEvent> eventList = AuditController.getLastTenActions(LoggedUser.getLoggedUser());
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<html>");
+        for (AuditEvent event : eventList) {
+            String message = createMessage(event);
+            stringBuilder.append(message).append("<br/>");
+        }
+        stringBuilder.append("</html>");
+
+        messageToDisplay = stringBuilder.toString();
+    }
+
+    private String createMessage(AuditEvent event) {
+        return event.getTimeStamp();
+    }
+
+    private void initTextLabel() {
+        textLabel = new JLabel(messageToDisplay);
 
         //add component
         add(textLabel);

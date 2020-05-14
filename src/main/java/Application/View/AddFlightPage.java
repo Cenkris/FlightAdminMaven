@@ -5,7 +5,7 @@ import Application.Controller.FlightController;
 import Application.Controller.UserController;
 import Application.Model.Audit;
 import Application.Model.Flight;
-import Audit.UserAudit;
+import Helper.LoggedUser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -85,6 +85,7 @@ public class AddFlightPage extends JFrame {
                 new JCheckBox("Friday"),
                 new JCheckBox("Saturday"),
                 new JCheckBox("Sunday"));
+        //TODO make text smaller
 
         //add components
         daysPanel.add(daysLabel);
@@ -193,7 +194,7 @@ public class AddFlightPage extends JFrame {
                 Flight flight = new Flight(source, destination, departureHour, landingHour, days, intPrice);
 
                 flightController.insertFlight(flight);
-                AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.ADD_FLIGHT);
+                AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.ADD_FLIGHT);
 
                 JOptionPane.showMessageDialog(null, "Flight was added to database");
                 dispose();

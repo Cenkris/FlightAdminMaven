@@ -4,7 +4,7 @@ import Application.Controller.AuditController;
 import Application.Controller.UserController;
 import Application.Model.Audit;
 import Application.Model.User;
-import Audit.UserAudit;
+import Helper.LoggedUser;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -70,8 +70,8 @@ public class LoginPage extends JFrame {
 
         if (!user.isEmpty()) {
             if (userPassword.equals(inputPassword)) {
-                UserAudit.loggedUser = user;
-                AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.LOGIN);
+                LoggedUser.loggedUser = user;
+                AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.LOGIN);
                 DashBoardPage dashBoardPage = new DashBoardPage();
                 dashBoardPage.setVisible(true);
                 dispose();

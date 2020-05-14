@@ -3,7 +3,7 @@ package Application.View;
 import Application.Controller.AuditController;
 import Application.Controller.UserController;
 import Application.Model.Audit;
-import Audit.UserAudit;
+import Helper.LoggedUser;
 import Helper.AccountConstraints;
 
 import javax.swing.*;
@@ -48,12 +48,12 @@ public class ChangePasswordPage extends JFrame {
 
         if (samePassword(password, confirmPassword) && password.matches(AccountConstraints.PASSWORD_VALIDATOR)) {
             JOptionPane.showMessageDialog(null, "Password successfully changed!");
-            userController.updatePassword(UserAudit.getLoggedUser(), password);
+            userController.updatePassword(LoggedUser.getLoggedUser(), password);
             dispose();
             JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(accountPage);
             topFrame.dispose();
-            AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.PASSWORD_CHANGED);
-            AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.LOGOUT);
+            AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.PASSWORD_CHANGED);
+            AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.LOGOUT);
             LoginPage loginPage = new LoginPage();
             loginPage.setVisible(true);
         } else if (password.isEmpty() || confirmPassword.isEmpty()) {

@@ -4,7 +4,7 @@ import Application.Controller.AuditController;
 import Application.Controller.UserController;
 import Application.Model.Audit;
 import Application.Model.User;
-import Audit.UserAudit;
+import Helper.LoggedUser;
 import Helper.AccountConstraints;
 
 import javax.swing.*;
@@ -16,7 +16,7 @@ public class AccountPage extends JPanel {
     private final UserController userController = new UserController();
     //Swing
     private JLabel welcomeMessageLabel;
-    private User loggedUser = UserAudit.getLoggedUser();
+    private User loggedUser = LoggedUser.getLoggedUser();
     private JButton changeUsernameButton, changeEmailButton, changePasswordButton, showHistoryButton;
     private JTextField newEmailTextField, newUsernameTextField;
     private JPanel newEmailPanel, newUsernamePanel;
@@ -61,7 +61,7 @@ public class AccountPage extends JPanel {
         showHistoryButton.addActionListener(event -> {
             AccountHistoryPage accountHistoryPage = new AccountHistoryPage();
             accountHistoryPage.setVisible(true);
-            AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.AUDIT);
+            AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.AUDIT);
         });
 
         //add components
@@ -109,8 +109,8 @@ public class AccountPage extends JPanel {
 
 
             newEmailTextField.setText("");
-            UserAudit.loggedUser = userController.getUserByEmail(inputEmail);
-            loggedUser = UserAudit.getLoggedUser();
+            LoggedUser.loggedUser = userController.getUserByEmail(inputEmail);
+            loggedUser = LoggedUser.getLoggedUser();
             AuditController.saveEvent(loggedUser, Audit.EMAIL_CHANGED);
             writeMessage();
             welcomeMessageLabel.setText(welcomeMessage);
@@ -181,8 +181,8 @@ public class AccountPage extends JPanel {
             JOptionPane.showMessageDialog(null, "Username " + loggedUser.getUsername()
                     + " was changed to " + inputUsername);
             newUsernameTextField.setText("");
-            UserAudit.loggedUser = userController.getUserByUsername(inputUsername);
-            loggedUser = UserAudit.getLoggedUser();
+            LoggedUser.loggedUser = userController.getUserByUsername(inputUsername);
+            loggedUser = LoggedUser.getLoggedUser();
             AuditController.saveEvent(loggedUser, Audit.USERNAME_CHANGED);
             writeMessage();
             welcomeMessageLabel.setText(welcomeMessage);

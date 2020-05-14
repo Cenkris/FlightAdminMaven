@@ -2,7 +2,7 @@ package Application.View;
 
 import Application.Controller.AuditController;
 import Application.Model.Audit;
-import Audit.UserAudit;
+import Helper.LoggedUser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,10 +33,10 @@ public class DashBoardPage extends JFrame {
 
         if (panel instanceof AccountPage) {
             if (!lastAction.equals(Audit.ACCOUNT.toString()))
-                AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.ACCOUNT);
+                AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.ACCOUNT);
         } else {
             if (!lastAction.equals(Audit.HOME.toString()))
-                AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.HOME);
+                AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.HOME);
         }
 
         Component[] components = contentPanel.getComponents();
@@ -97,7 +97,7 @@ public class DashBoardPage extends JFrame {
             public void mousePressed(MouseEvent e) {
                 LoginPage loginPage = new LoginPage();
                 loginPage.setVisible(true);
-                AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.LOGOUT);
+                AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.LOGOUT);
                 dispose();
             }
         };
@@ -121,7 +121,7 @@ public class DashBoardPage extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (!AuditController.isLastAction(Audit.LOGOUT)) {
-                    AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.LOGOUT);
+                    AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.LOGOUT);
                 }
             }
         };

@@ -6,7 +6,7 @@ import Application.Controller.UserController;
 import Application.Model.Audit;
 import Application.Model.Flight;
 import Application.Model.TableRenderer;
-import Audit.UserAudit;
+import Helper.LoggedUser;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -92,7 +92,7 @@ public class HomePage extends JPanel {
                             String source = fligthTable.getValueAt(selectedRow, 1).toString();
                             String destination = flightTableModel.getValueAt(selectedRow, 2).toString();
                             Flight flight = new Flight(source, destination);
-                            AuditController.saveEvent(UserAudit.getLoggedUser(), Audit.REMOVE_FLIGHT);
+                            AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.REMOVE_FLIGHT);
                             flightController.removeFlight(flight);
                             flightTableModel.removeRow(selectedRow);
                         }

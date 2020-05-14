@@ -1,8 +1,8 @@
-package Audit;
+package Helper;
 
 import Application.Model.User;
 
-public class UserAudit {
+public class LoggedUser {
     public static User loggedUser;
 
     public static User getLoggedUser(){
