@@ -2,16 +2,17 @@ package Application.View;
 
 import Application.Controller.AuditController;
 import Application.Model.AuditEvent;
+import Application.Model.User;
 import Helper.LoggedUser;
 
 import javax.swing.*;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import javax.swing.border.EmptyBorder;
 import java.util.List;
 
 public class AccountHistoryPage extends JFrame {
     private JLabel textLabel;
     private String messageToDisplay;
+    private final int numberOfActionsDisplayed = 10;
 
     AccountHistoryPage() {
         initMessage();
@@ -20,12 +21,14 @@ public class AccountHistoryPage extends JFrame {
     }
 
     private void initMessage() {
-        List<AuditEvent> eventList = AuditController.getLastTenActions(LoggedUser.getLoggedUser());
+        User user = LoggedUser.getLoggedUser();
+        List<AuditEvent> eventList = AuditController.getLastTenActions(user);
         StringBuilder stringBuilder = new StringBuilder();
+
         stringBuilder.append("<html>");
-        for (AuditEvent event : eventList) {
-            String message = createMessage(event);
-            stringBuilder.append(message).append("<br/>");
+        for (int i = 0; i < numberOfActionsDisplayed; i++) {
+            String message = createMessage(eventList.get(i));
+            stringBuilder.append(message);
         }
         stringBuilder.append("</html>");
 
@@ -33,11 +36,50 @@ public class AccountHistoryPage extends JFrame {
     }
 
     private String createMessage(AuditEvent event) {
-        return event.getTimeStamp();
+        String result = "";
+        String[] splitTimeStamp = event.getTimeStamp().split(" ");
+        String formatedTimestamp = splitTimeStamp[0] + " at " + splitTimeStamp[1];
+        switch (event.getAction()) {
+            case "LOGIN":
+                result += "<p style=\"color:blue\">Logged in on " + formatedTimestamp + "</p>";
+                break;
+            case "LOGOUT":
+                result += "<p style=\"color:red\">Logged out on " + formatedTimestamp + "</p>";
+                break;
+            case "REGISTER":
+                result += "<p>Account created on " + formatedTimestamp + "</p>";
+                break;
+            case "HOME":
+                result += "<p>Accessed Flight Dashboard on " + formatedTimestamp + "</p>";
+                break;
+            case "ADD_FLIGHT":
+                result += "<p style=\"color: rgb(210, 148, 0)\">On " + formatedTimestamp + " new flight was added" + "</p>";
+                break;
+            case "REMOVE_FLIGHT":
+                result += "<p style=\"color: rgb(249, 0, 88)\">On " + formatedTimestamp + " a flight was removed" + "</p>";
+                break;
+            case "ACCOUNT":
+                result += "<p>Accessed Account Settings on " + formatedTimestamp + "</p>";
+                break;
+            case "AUDIT":
+                result += "<p>Accessed Account History on " + formatedTimestamp + "</p>";
+                break;
+            case "PASSWORD_CHANGED":
+                result += "<p>Password was changed on " + formatedTimestamp + "</p>";
+                break;
+            case "EMAIL_CHANGED":
+                result += "<p>Email was changed on " + formatedTimestamp + "</p>";
+                break;
+            case "USERNAME_CHANGED":
+                result += "<p>Username was changed on " + formatedTimestamp + "</p>";
+                break;
+        }
+        return result;
     }
 
     private void initTextLabel() {
         textLabel = new JLabel(messageToDisplay);
+        textLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         //add component
         add(textLabel);

@@ -59,9 +59,9 @@ public class AccountPage extends JPanel {
         showHistoryButton = new JButton("Show Account History");
         showHistoryButton.setPreferredSize(TEXT_FIELD_DIMENSION);
         showHistoryButton.addActionListener(event -> {
+            AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.AUDIT);
             AccountHistoryPage accountHistoryPage = new AccountHistoryPage();
             accountHistoryPage.setVisible(true);
-            AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.AUDIT);
         });
 
         //add components

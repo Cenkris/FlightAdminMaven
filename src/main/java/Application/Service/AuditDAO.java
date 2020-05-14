@@ -25,7 +25,7 @@ public class AuditDAO {
 
             insertAuditQuery = connection.prepareStatement("INSERT INTO audit VALUES (null, ?, ?, ?)");
             selectLastEntryQuery = connection.prepareStatement("SELECT * FROM audit WHERE id = (SELECT MAX(id) FROM audit)");
-            selectLastTenActionsByUser = connection.prepareStatement("SELECT * FROM audit WHERE user = ? LIMIT 10"); //TODO: rewrite statement
+            selectLastTenActionsByUser = connection.prepareStatement("SELECT * FROM audit WHERE user = ?");
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
