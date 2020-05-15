@@ -236,7 +236,8 @@ public class AddFlightPage extends JFrame {
         StringJoiner stringJoiner = new StringJoiner(", ");
         for (JCheckBox box : daysCheckBox) {
             if (box.isSelected()) {
-                stringJoiner.add(box.getText());
+                String dayOfTheWeek = box.getText().substring(0,2);
+                stringJoiner.add(dayOfTheWeek);
             }
         }
         return stringJoiner.toString();
