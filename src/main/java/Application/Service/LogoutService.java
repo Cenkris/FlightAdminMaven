@@ -8,11 +8,11 @@ import Helper.LoggedUser;
 import javax.swing.*;
 import java.time.Instant;
 import java.time.LocalTime;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 public class LogoutService {
 
@@ -20,18 +20,11 @@ public class LogoutService {
     //TODO: newtable exceptions
 
     private static LocalTime lastAction;
-    private static int waitTime = 5;
+    private static int waitTime = 15;
     private static ExecutorService service;
-    //    private static Future<?> future;
     private final JFrame baseFrame;
 
     public LogoutService(JFrame baseFrame) {
-        Set<Thread> threads = Thread.getAllStackTraces().keySet();
-        int count = 1;
-        for (Thread thread : threads) {
-            System.out.println("Thread(" + count + "): " + thread.getName());
-            count++;
-        }
         this.baseFrame = baseFrame;
         logAction();
         startTimer();

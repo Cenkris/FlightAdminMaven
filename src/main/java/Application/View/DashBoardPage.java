@@ -17,9 +17,8 @@ public class DashBoardPage extends JFrame {
     private AccountPage accountPage = new AccountPage();
     private JPanel contentPanel;
     private JMenuBar menuBar;
-    private JMenu optionsMenu;
-    private JMenuItem homeMenuItem, accountMenuItem, logOutMenuItem, aboutMenuItem;
-    private LogoutService logoutService;
+    private JMenu optionsMenu, settingsMenu;
+    private JMenuItem homeMenuItem, accountMenuItem, logOutMenuItem, aboutMenuItem, changeLogOutTimerItem;
 
 
     public DashBoardPage() {
@@ -31,7 +30,7 @@ public class DashBoardPage extends JFrame {
     }
 
     private void initLogout() {
-        logoutService = new LogoutService(this);
+        LogoutService logoutService = new LogoutService(this);
     }
 
     private void switchPane(JPanel panel) {
@@ -72,6 +71,7 @@ public class DashBoardPage extends JFrame {
         MouseAdapter onClickAboutMouseAdapter = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                LogoutService.logAction();
                 AboutPage aboutPage = new AboutPage();
                 aboutPage.setVisible(true);
             }
@@ -111,6 +111,27 @@ public class DashBoardPage extends JFrame {
         };
         logOutMenuItem.addMouseListener(onClickLogOutMouseAdapter);
 
+
+        //changeLogOut
+        changeLogOutTimerItem = new JMenuItem("Change log out timer");
+        MouseAdapter onClickChangeTimerMouseAdapter = new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                String inputText = JOptionPane.showInputDialog("Input the number of minutes for auto logout function. Default is 15. " +
+                        "\nPlease make it natural number > 0");
+
+                if (inputText != null) {
+                    if (inputText.matches("\\d+")) {
+                        LogoutService.setWaitTime(Integer.parseInt(inputText));
+                        JOptionPane.showMessageDialog(null, "A new logout timer is set.");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Invalid input");
+                    }
+                }
+            }
+        };
+        changeLogOutTimerItem.addMouseListener(onClickChangeTimerMouseAdapter);
+
         //options menu
         optionsMenu = new JMenu("Options");
         optionsMenu.add(aboutMenuItem);
@@ -118,9 +139,14 @@ public class DashBoardPage extends JFrame {
         optionsMenu.add(accountMenuItem);
         optionsMenu.add(logOutMenuItem);
 
+        //settings menu
+        settingsMenu = new JMenu("Experimental Settings");
+        settingsMenu.add(changeLogOutTimerItem);
+
         //add menu to menu bar
         menuBar = new JMenuBar();
         menuBar.add(optionsMenu);
+        menuBar.add(settingsMenu);
         setJMenuBar(menuBar);
     }
 

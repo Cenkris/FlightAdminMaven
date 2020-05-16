@@ -182,7 +182,6 @@ public class HomePage extends JPanel {
     public void updateTable() {
         Flight flight = flightController.getLastInsertedFlight();
         Object[] row = constructRow(flight);
-        System.out.println("numberOfFlights: " + flightController.numberOfFlights());
         if (flightController.numberOfFlights() > 0) {
             try {
                 String source = fligthTable.getValueAt(flightTableModel.getRowCount() - 1, 1).toString();

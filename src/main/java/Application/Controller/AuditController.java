@@ -4,6 +4,7 @@ import Application.Model.Audit;
 import Application.Model.AuditEvent;
 import Application.Model.User;
 import Application.Service.AuditDAO;
+import Application.Service.LogoutService;
 import Application.View.HomePage;
 import DataBase.DatabaseConnection;
 
@@ -22,6 +23,7 @@ public class AuditController {
         if (audit.equals(Audit.LOGOUT)) {
             HomePage.stopClockThread();
         }
+        LogoutService.logAction();
         auditDAO.saveEvent(user, audit);
     }
 
