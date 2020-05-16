@@ -2,6 +2,7 @@ package Application.View;
 
 import Application.Controller.AuditController;
 import Application.Model.Audit;
+import Application.Service.LogoutService;
 import Helper.LoggedUser;
 
 import javax.swing.*;
@@ -18,12 +19,19 @@ public class DashBoardPage extends JFrame {
     private JMenuBar menuBar;
     private JMenu optionsMenu;
     private JMenuItem homeMenuItem, accountMenuItem, logOutMenuItem, aboutMenuItem;
+    private LogoutService logoutService;
+
 
     public DashBoardPage() {
+        initLogout();
         initContentPanel();
         switchPane(homePage);
         initOptionsMenu();
         initDefaultValues();
+    }
+
+    private void initLogout() {
+        logoutService = new LogoutService(this);
     }
 
     private void switchPane(JPanel panel) {
@@ -121,6 +129,7 @@ public class DashBoardPage extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (!AuditController.isLastAction(Audit.LOGOUT)) {
+                    LogoutService.serviceShutDown();
                     AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.LOGOUT);
                 }
             }

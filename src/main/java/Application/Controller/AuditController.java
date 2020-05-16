@@ -4,6 +4,7 @@ import Application.Model.Audit;
 import Application.Model.AuditEvent;
 import Application.Model.User;
 import Application.Service.AuditDAO;
+import Application.View.HomePage;
 import DataBase.DatabaseConnection;
 
 import java.sql.Connection;
@@ -18,6 +19,9 @@ public class AuditController {
     private static final AuditDAO auditDAO;
 
     public static void saveEvent(User user, Audit audit) {
+        if (audit.equals(Audit.LOGOUT)) {
+            HomePage.stopClockThread();
+        }
         auditDAO.saveEvent(user, audit);
     }
 

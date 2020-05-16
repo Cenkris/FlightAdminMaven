@@ -34,4 +34,8 @@ public class FlightController {
     public Flight getLastInsertedFlight(){
         return flightDAO.selectLastInsertedFlight();
     }
+
+    public boolean isFlightTableEmpty(){
+        return flightDAO.selectAllFlights().isEmpty();
+    }
 }

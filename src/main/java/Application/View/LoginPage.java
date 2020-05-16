@@ -23,7 +23,7 @@ public class LoginPage extends JFrame {
     private final Dimension FIELD_DIMENSIONS = new Dimension(150, 30);
     private Dimension BUTTON_DIMENSION = new Dimension(90, 20);
 
-    LoginPage() {
+    public LoginPage() {
         initMessage();
         initUsernamePanel();
         initPasswordPanel();

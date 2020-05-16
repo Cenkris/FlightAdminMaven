@@ -19,6 +19,8 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class HomePage extends JPanel {
     private JLabel clockLabel;
@@ -30,6 +32,7 @@ public class HomePage extends JPanel {
     private DefaultTableModel flightTableModel;
     private final FlightController flightController = new FlightController();
     private final UserController userController = new UserController();
+    private static boolean running = true;
 
 
     public HomePage() {
@@ -218,6 +221,10 @@ public class HomePage extends JPanel {
         }
     }
 
+    public static void stopClockThread(){
+        running = false;
+    }
+
     private void initClock() {
         //panel
         clockPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -225,24 +232,23 @@ public class HomePage extends JPanel {
         //label
         clockLabel = new JLabel();
 
-        SwingWorker<String, Void> worker = new SwingWorker<>() {
-            @Override
-            protected String doInBackground() {
-                //noinspection InfiniteLoopStatement
-                while (true) {
-                    Date date = Date.from(Instant.now());
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-                    clockLabel.setText("Date & Time: " + formatter.format(date));
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+        running = true;
+        Runnable clock = () -> {
+            while (running) {
+                Date date = Date.from(Instant.now());
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                clockLabel.setText("Date & Time: " + formatter.format(date));
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
-        };
-        worker.execute();
 
+        };
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        service.execute(clock);
+        service.shutdown();
 
         //add Components
         clockPanel.add(clockLabel);
