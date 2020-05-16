@@ -38,4 +38,8 @@ public class FlightController {
     public boolean isFlightTableEmpty(){
         return flightDAO.selectAllFlights().isEmpty();
     }
+
+    public int numberOfFlights(){
+        return flightDAO.getNumberOfFlightsInTable();
+    }
 }

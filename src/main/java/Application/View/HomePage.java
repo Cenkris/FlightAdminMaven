@@ -180,13 +180,24 @@ public class HomePage extends JPanel {
     }
 
     public void updateTable() {
-
-        String source = fligthTable.getValueAt(flightTableModel.getRowCount() - 1, 1).toString();
-        String destination = flightTableModel.getValueAt(flightTableModel.getRowCount() - 1, 2).toString();
         Flight flight = flightController.getLastInsertedFlight();
         Object[] row = constructRow(flight);
-
-        if (!flight.getSource().equals(source) || !flight.getDestination().equals(destination)) {
+        System.out.println("numberOfFlights: " + flightController.numberOfFlights());
+        if (flightController.numberOfFlights() > 0) {
+            try {
+                String source = fligthTable.getValueAt(flightTableModel.getRowCount() - 1, 1).toString();
+                String destination = flightTableModel.getValueAt(flightTableModel.getRowCount() - 1, 2).toString();
+                if (!flight.getSource().equals(source) || !flight.getDestination().equals(destination)) {
+                    flightTableModel.addRow(row);
+                    revalidate();
+                    repaint();
+                }
+            } catch (ArrayIndexOutOfBoundsException e){
+                flightTableModel.addRow(row);
+                revalidate();
+                repaint();
+            }
+        } else if (flight.getSource() != null) {
             flightTableModel.addRow(row);
             revalidate();
             repaint();
@@ -221,7 +232,7 @@ public class HomePage extends JPanel {
         }
     }
 
-    public static void stopClockThread(){
+    public static void stopClockThread() {
         running = false;
     }
 

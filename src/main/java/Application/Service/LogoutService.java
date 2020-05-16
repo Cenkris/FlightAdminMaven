@@ -20,7 +20,7 @@ public class LogoutService {
     //TODO: newtable exceptions
 
     private static LocalTime lastAction;
-    private static int waitTime = 1;
+    private static int waitTime = 5;
     private static ExecutorService service;
     //    private static Future<?> future;
     private final JFrame baseFrame;

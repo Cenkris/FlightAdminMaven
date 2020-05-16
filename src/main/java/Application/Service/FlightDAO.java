@@ -13,7 +13,7 @@ import java.util.List;
 public class FlightDAO {
 
     private PreparedStatement insertQuery;
-    private PreparedStatement selectSameRouteQuery, selectAllFlightsQuery, selectLastFlightQuery;
+    private PreparedStatement selectSameRouteQuery, selectAllFlightsQuery, selectLastFlightQuery, selectCount;
     private PreparedStatement removeFlightQuery;
 
     public FlightDAO(Connection connection) {
@@ -23,6 +23,7 @@ public class FlightDAO {
             removeFlightQuery = connection.prepareStatement("DELETE FROM flights WHERE source = ? AND destination = ?");
             selectAllFlightsQuery = connection.prepareStatement("SELECT * FROM flights");
             selectLastFlightQuery = connection.prepareStatement("SELECT * FROM flights WHERE id = (SELECT MAX(id) FROM flights)");
+            selectCount = connection.prepareStatement("SELECT COUNT(*) FROM flights");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -105,5 +106,17 @@ public class FlightDAO {
 
 
         return lastFlight;
+    }
+
+    public int getNumberOfFlightsInTable() {
+        try {
+            ResultSet result = selectCount.executeQuery();
+            if (result.next()) {
+                return result.getInt(1);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return 0;
     }
 }
