@@ -50,7 +50,7 @@ public class AccountPage extends JPanel {
         changePasswordButton = new JButton("Change Password");
         changePasswordButton.setPreferredSize(BUTTON_FIELD_DIMENSION);
         changePasswordButton.addActionListener(event -> {
-            ChangePasswordPage changePasswordPage = new ChangePasswordPage();
+            ChangePasswordPage changePasswordPage = ChangePasswordPage.getInstance();
             changePasswordPage.parent(this);
             changePasswordPage.setVisible(true);
         });
@@ -60,7 +60,7 @@ public class AccountPage extends JPanel {
         showHistoryButton.setPreferredSize(TEXT_FIELD_DIMENSION);
         showHistoryButton.addActionListener(event -> {
             AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.AUDIT);
-            AccountHistoryPage accountHistoryPage = new AccountHistoryPage();
+            AccountHistoryPage accountHistoryPage = AccountHistoryPage.getInstance();
             accountHistoryPage.setVisible(true);
         });
 

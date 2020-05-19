@@ -2,7 +2,6 @@ package Application.View;
 
 import Application.Controller.AuditController;
 import Application.Controller.FlightController;
-import Application.Controller.UserController;
 import Application.Model.Audit;
 import Application.Model.Flight;
 import Helper.LoggedUser;
@@ -22,9 +21,10 @@ public class AddFlightPage extends JFrame {
     private List<JCheckBox> daysCheckBox;
     private final Dimension TEXTFIELD_DIMENSIONS = new Dimension(200, 30);
     private final FlightController flightController = new FlightController();
-    private final UserController userController = new UserController();
+    private static AddFlightPage instance;
 
-    public AddFlightPage() {
+
+    private AddFlightPage() {
         initSourcePanel();
         initDestinationPanel();
         initLeaveHourPanel();
@@ -33,6 +33,13 @@ public class AddFlightPage extends JFrame {
         initPricePanel();
         initButtonsPanel();
         initDefaultValues();
+    }
+
+    public static AddFlightPage getInstance() {
+        if (instance == null) {
+            instance = new AddFlightPage();
+        }
+        return instance;
     }
 
     private void initButtonsPanel() {
@@ -236,7 +243,7 @@ public class AddFlightPage extends JFrame {
         StringJoiner stringJoiner = new StringJoiner(", ");
         for (JCheckBox box : daysCheckBox) {
             if (box.isSelected()) {
-                String dayOfTheWeek = box.getText().substring(0,2);
+                String dayOfTheWeek = box.getText().substring(0, 2);
                 stringJoiner.add(dayOfTheWeek);
             }
         }

@@ -20,13 +20,21 @@ public class ChangePasswordPage extends JFrame {
     private JButton changePasswordButton;
     private final Dimension FIELD_DIMENSIONS = new Dimension(150, 30);
     private AccountPage accountPage;
+    private static ChangePasswordPage instance;
 
-    ChangePasswordPage() {
+    private ChangePasswordPage() {
         initMessage();
         initPasswordPanel();
         initConfirmPasswordPanel();
         initChangePasswordButton();
         initDefaultValues();
+    }
+
+    public static ChangePasswordPage getInstance(){
+        if (instance == null) {
+            instance = new ChangePasswordPage();
+        }
+        return instance;
     }
 
     private void initChangePasswordButton() {

@@ -7,10 +7,18 @@ import java.awt.*;
 public class AboutPage extends JFrame {
     private JLabel aboutLabel;
     private JPanel aboutPanel;
+    private static AboutPage instance;
 
-    AboutPage(){
+    private AboutPage(){
         initAbout();
         initDefaultValues();
+    }
+
+    public static AboutPage getInstance(){
+        if (instance == null) {
+            instance = new AboutPage();
+        }
+        return instance;
     }
 
     private void initAbout() {

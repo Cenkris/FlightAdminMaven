@@ -6,13 +6,13 @@ import Application.View.LoginPage;
 import Helper.LoggedUser;
 
 import javax.swing.*;
+import java.awt.*;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
-import static java.time.temporal.ChronoUnit.SECONDS;
 
 public class LogoutService {
 
@@ -20,7 +20,7 @@ public class LogoutService {
     //TODO: newtable exceptions
 
     private static LocalTime lastAction;
-    private static int waitTime = 15;
+    private static int waitTime = 1;
     private static ExecutorService service;
     private final JFrame baseFrame;
 
@@ -67,8 +67,16 @@ public class LogoutService {
         baseFrame.dispose();
         AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.LOGOUT);
         service.shutdownNow();
+        closeAllOpenedWindows();
         LoginPage loginPage = new LoginPage();
         loginPage.setVisible(true);
+    }
+
+    private void closeAllOpenedWindows() {
+        Window[] windows = Window.getWindows();
+        for (Window window : windows) {
+            window.setVisible(false);
+        }
     }
 
     public static void logAction() {

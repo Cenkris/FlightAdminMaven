@@ -61,7 +61,7 @@ public class HomePage extends JPanel {
         addFlightButton = new JButton("Add Flight");
         addFlightButton.setPreferredSize(new Dimension(xAxisDimension, 30));
         addFlightButton.addActionListener(event -> {
-            AddFlightPage addFlightPage = new AddFlightPage();
+            AddFlightPage addFlightPage = AddFlightPage.getInstance();
             addFlightPage.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {

@@ -13,11 +13,20 @@ public class AccountHistoryPage extends JFrame {
     private JLabel textLabel;
     private String messageToDisplay;
     private final int numberOfActionsDisplayed = 10;
+    private static AccountHistoryPage instance;
 
-    AccountHistoryPage() {
+    private AccountHistoryPage() {
         initMessage();
         initTextLabel();
         initDefaultValues();
+    }
+
+    public static AccountHistoryPage getInstance() {
+        if (instance == null) {
+            instance = new AccountHistoryPage();
+        }
+        refreshMessage();
+        return instance;
     }
 
     private void initMessage() {
@@ -33,6 +42,11 @@ public class AccountHistoryPage extends JFrame {
         stringBuilder.append("</html>");
 
         messageToDisplay = stringBuilder.toString();
+    }
+
+    private static void refreshMessage() {
+        instance.initMessage();
+        instance.textLabel.setText(instance.messageToDisplay);
     }
 
     private String createMessage(AuditEvent event) {

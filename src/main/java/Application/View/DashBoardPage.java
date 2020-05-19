@@ -72,7 +72,7 @@ public class DashBoardPage extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 LogoutService.logAction();
-                AboutPage aboutPage = new AboutPage();
+                AboutPage aboutPage = AboutPage.getInstance();
                 aboutPage.setVisible(true);
             }
         };
