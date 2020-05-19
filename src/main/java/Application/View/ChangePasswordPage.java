@@ -34,7 +34,13 @@ public class ChangePasswordPage extends JFrame {
         if (instance == null) {
             instance = new ChangePasswordPage();
         }
+        refreshPage();
         return instance;
+    }
+
+    private static void refreshPage() {
+        instance.confirmPasswordTextField.setText("");
+        instance.passwordTextField.setText("");
     }
 
     private void initChangePasswordButton() {

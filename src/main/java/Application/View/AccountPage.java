@@ -4,8 +4,8 @@ import Application.Controller.AuditController;
 import Application.Controller.UserController;
 import Application.Model.Audit;
 import Application.Model.User;
-import Helper.LoggedUser;
 import Helper.AccountConstraints;
+import Helper.LoggedUser;
 
 import javax.swing.*;
 import java.awt.*;

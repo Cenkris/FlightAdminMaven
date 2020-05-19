@@ -39,7 +39,17 @@ public class AddFlightPage extends JFrame {
         if (instance == null) {
             instance = new AddFlightPage();
         }
+        refreshPage();
         return instance;
+    }
+
+    private static void refreshPage() {
+        instance.destinationTextField.setText("");
+        instance.departureHourTextField.setText("");
+        instance.sourceTextField.setText("");
+        instance.durationTextField.setText("");
+        instance.priceTextField.setText("");
+        instance.daysCheckBox.forEach(checkBox -> checkBox.setSelected(false));
     }
 
     private void initButtonsPanel() {
