@@ -4,6 +4,7 @@ import Application.Controller.AuditController;
 import Application.Controller.FlightController;
 import Application.Model.Audit;
 import Application.Model.Flight;
+import Helper.BackButton;
 import Helper.LoggedUser;
 
 import javax.swing.*;
@@ -25,6 +26,7 @@ public class AddFlightPage extends JFrame {
 
 
     private AddFlightPage() {
+
         initSourcePanel();
         initDestinationPanel();
         initLeaveHourPanel();
@@ -39,6 +41,7 @@ public class AddFlightPage extends JFrame {
         if (instance == null) {
             instance = new AddFlightPage();
         }
+        BackButton.addPage(instance);
         refreshPage();
         return instance;
     }

@@ -5,6 +5,7 @@ import Application.Controller.UserController;
 import Application.Model.Audit;
 import Application.Model.User;
 import Helper.AccountConstraints;
+import Helper.BackButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,6 +23,7 @@ public class RegisterPage extends JFrame {
     private final Dimension FIELD_DIMENSIONS = new Dimension(200, 30);
 
     RegisterPage() {
+        BackButton.addPage(this);
         initHelpMessage();
         initUsernamePanel();
         initPasswordPanel();

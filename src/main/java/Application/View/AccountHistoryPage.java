@@ -3,6 +3,7 @@ package Application.View;
 import Application.Controller.AuditController;
 import Application.Model.AuditEvent;
 import Application.Model.User;
+import Helper.BackButton;
 import Helper.LoggedUser;
 
 import javax.swing.*;
@@ -19,12 +20,14 @@ public class AccountHistoryPage extends JFrame {
         initMessage();
         initTextLabel();
         initDefaultValues();
+
     }
 
     public static AccountHistoryPage getInstance() {
         if (instance == null) {
             instance = new AccountHistoryPage();
         }
+        BackButton.addPage(instance);
         refreshMessage();
         return instance;
     }

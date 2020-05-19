@@ -1,5 +1,7 @@
 package Application.View;
 
+import Helper.BackButton;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,6 +10,7 @@ public class StartPage extends JFrame {
     private final Dimension BUTTON_DIMENSION = new Dimension(120,50);
 
     public StartPage(){
+        BackButton.addPage(this);
         initLoginButton();
         initRegisterButton();
         initDefaultValues();

@@ -3,6 +3,7 @@ package Application.View;
 import Application.Controller.AuditController;
 import Application.Controller.UserController;
 import Application.Model.Audit;
+import Helper.BackButton;
 import Helper.LoggedUser;
 import Helper.AccountConstraints;
 
@@ -23,6 +24,7 @@ public class ChangePasswordPage extends JFrame {
     private static ChangePasswordPage instance;
 
     private ChangePasswordPage() {
+
         initMessage();
         initPasswordPanel();
         initConfirmPasswordPanel();
@@ -34,6 +36,7 @@ public class ChangePasswordPage extends JFrame {
         if (instance == null) {
             instance = new ChangePasswordPage();
         }
+        BackButton.addPage(instance);
         refreshPage();
         return instance;
     }

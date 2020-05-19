@@ -4,6 +4,7 @@ import Application.Controller.AuditController;
 import Application.Controller.UserController;
 import Application.Model.Audit;
 import Application.Model.User;
+import Helper.BackButton;
 import Helper.LoggedUser;
 
 import javax.swing.*;
@@ -24,6 +25,7 @@ public class LoginPage extends JFrame {
     private Dimension BUTTON_DIMENSION = new Dimension(90, 20);
 
     public LoginPage() {
+        BackButton.addPage(this);
         initMessage();
         initUsernamePanel();
         initPasswordPanel();

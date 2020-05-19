@@ -6,6 +6,7 @@ import Application.Controller.UserController;
 import Application.Model.Audit;
 import Application.Model.Flight;
 import Application.Model.TableRenderer;
+import Helper.BackButton;
 import Helper.LoggedUser;
 
 import javax.swing.*;
@@ -261,6 +262,7 @@ public class HomePage extends JPanel {
         service.shutdown();
 
         //add Components
+        clockPanel.add(new BackButton());
         clockPanel.add(clockLabel);
         add(clockPanel);
     }

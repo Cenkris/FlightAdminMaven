@@ -1,5 +1,7 @@
 package Application.View;
 
+import Helper.BackButton;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -10,6 +12,7 @@ public class AboutPage extends JFrame {
     private static AboutPage instance;
 
     private AboutPage(){
+
         initAbout();
         initDefaultValues();
     }
@@ -18,6 +21,7 @@ public class AboutPage extends JFrame {
         if (instance == null) {
             instance = new AboutPage();
         }
+        BackButton.addPage(instance);
         return instance;
     }
 
