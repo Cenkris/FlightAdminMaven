@@ -36,7 +36,7 @@ public class ChangePasswordPage extends JFrame {
         if (instance == null) {
             instance = new ChangePasswordPage();
         }
-        BackButton.addPage(instance);
+        BackButton.addComponent(instance);
         refreshPage();
         return instance;
     }

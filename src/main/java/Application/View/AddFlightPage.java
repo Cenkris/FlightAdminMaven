@@ -41,7 +41,7 @@ public class AddFlightPage extends JFrame {
         if (instance == null) {
             instance = new AddFlightPage();
         }
-        BackButton.addPage(instance);
+        BackButton.addComponent(instance);
         refreshPage();
         return instance;
     }

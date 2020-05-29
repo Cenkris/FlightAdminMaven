@@ -3,6 +3,7 @@ package Application.View;
 import Application.Controller.AuditController;
 import Application.Model.Audit;
 import Application.Service.LogoutService;
+import Helper.BackButton;
 import Helper.LoggedUser;
 
 import javax.swing.*;
@@ -15,7 +16,7 @@ import java.awt.event.WindowEvent;
 public class DashBoardPage extends JFrame {
     private HomePage homePage = new HomePage();
     private AccountPage accountPage = new AccountPage();
-    private JPanel contentPanel;
+    private static JPanel contentPanel;
     private JMenuBar menuBar;
     private JMenu optionsMenu, settingsMenu;
     private JMenuItem homeMenuItem, accountMenuItem, logOutMenuItem, aboutMenuItem, changeLogOutTimerItem;
@@ -33,30 +34,33 @@ public class DashBoardPage extends JFrame {
         LogoutService logoutService = new LogoutService(this);
     }
 
-    private void switchPane(JPanel panel) {
+    public static void switchPane(JPanel panel) {
         String lastAction = AuditController.getLastActionName();
         String componentName = "";
 
-
         if (panel instanceof AccountPage) {
-            if (!lastAction.equals(Audit.ACCOUNT.toString()))
+            if (!lastAction.equals(Audit.ACCOUNT.toString())) {
                 AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.ACCOUNT);
+            }
+
         } else {
-            if (!lastAction.equals(Audit.HOME.toString()))
+            if (!lastAction.equals(Audit.HOME.toString())) {
                 AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.HOME);
+            }
         }
 
-        Component[] components = contentPanel.getComponents();
+        Component[] components = DashBoardPage.contentPanel.getComponents();
         for (Component component : components) {
             componentName = component.getName();
         }
 
         if (!componentName.equals(panel.getName())) {
+
             contentPanel.removeAll();
             contentPanel.add(panel);
             contentPanel.revalidate();
             contentPanel.repaint();
-            pack();
+//            pack();
         }
     }
 
@@ -84,6 +88,7 @@ public class DashBoardPage extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 switchPane(homePage);
+                BackButton.addComponent(homePage);
             }
         };
         homeMenuItem.addMouseListener(onClickHomeMouseAdapter);
@@ -94,6 +99,7 @@ public class DashBoardPage extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 switchPane(accountPage);
+                BackButton.addComponent(accountPage);
             }
         };
         accountMenuItem.addMouseListener(onClickAccountMouseAdapter);
@@ -151,6 +157,8 @@ public class DashBoardPage extends JFrame {
     }
 
     private void initDefaultValues() {
+        BackButton.addComponent(homePage);
+
         WindowAdapter windowAdapter = new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {

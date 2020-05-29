@@ -28,7 +28,7 @@ public class HomePage extends JPanel {
     private JPanel clockPanel;
     private JTable fligthTable;
     private JButton addFlightButton, deleteFlightButton;
-    private String[] colNames = {"", "Sursa", "Destinatie", "Ora Plecare", "Ora Sosire", "Zile", "Pret"};
+    private String[] colNames = {"", "Source", "Destination", "Departure hour", "Arrival hour", "Days", "Price"};
     private final int xAxisDimension = 600;
     private DefaultTableModel flightTableModel;
     private final FlightController flightController = new FlightController();
@@ -141,15 +141,15 @@ public class HomePage extends JPanel {
         destinatieColumn.setCellRenderer(centerRender);
 
         TableColumn oraPlecareColumn = columnModel.getColumn(3);
-        oraPlecareColumn.setPreferredWidth(80);
+        oraPlecareColumn.setPreferredWidth(105);
         oraPlecareColumn.setCellRenderer(centerRender);
 
         TableColumn oraSosireColumn = columnModel.getColumn(4);
-        oraSosireColumn.setPreferredWidth(80);
+        oraSosireColumn.setPreferredWidth(90);
         oraSosireColumn.setCellRenderer(centerRender);
 
         TableColumn zileColumn = columnModel.getColumn(5);
-        zileColumn.setPreferredWidth(180);
+        zileColumn.setPreferredWidth(160);
         zileColumn.setCellRenderer(centerRender);
 
         TableColumn pretColumn = columnModel.getColumn(6);

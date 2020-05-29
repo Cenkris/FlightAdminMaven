@@ -5,12 +5,14 @@ import Application.Controller.UserController;
 import Application.Model.Audit;
 import Application.Model.User;
 import Helper.AccountConstraints;
+import Helper.BackButton;
 import Helper.LoggedUser;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.Flow;
 
 public class AccountPage extends JPanel {
     private final UserController userController = new UserController();
@@ -29,6 +31,7 @@ public class AccountPage extends JPanel {
 
     public AccountPage() {
         writeMessage();
+        initBackButton();
         initWelcomeMessage();
         initNewEmailPanel();
         initNewUsernamePanel();
@@ -36,8 +39,14 @@ public class AccountPage extends JPanel {
         initPanelDefaultValues();
     }
 
+    private void initBackButton() {
+        JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        backButtonPanel.add(new BackButton());
+        add(backButtonPanel);
+    }
+
     private void initPanelDefaultValues() {
-        setLayout(new GridLayout(4, 1));
+        setLayout(new GridLayout(5, 1));
         setName("AccountPage");
     }
 
@@ -75,7 +84,7 @@ public class AccountPage extends JPanel {
         newUsernamePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         //text field
-        newUsernameTextField = new JTextField("Input the new username ");
+        newUsernameTextField = new JTextField("Input a new username");
         newUsernameTextField.setPreferredSize(TEXT_FIELD_DIMENSION);
         MouseAdapter usernameMouseAdapter = new MouseAdapter() {
             @Override
@@ -118,9 +127,9 @@ public class AccountPage extends JPanel {
             welcomeMessageLabel.setPreferredSize(new Dimension(messageLengthDimension, 30));
             repaint();
             JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            topFrame.pack();
+//            topFrame.pack();
 
-        } else if (inputEmail.isEmpty()) {
+        } else if (inputEmail.isEmpty() || inputEmail.equals("Input a new email")) {
 
             JOptionPane.showMessageDialog(null, "Please input an email address");
             newEmailTextField.setText("");
@@ -149,7 +158,7 @@ public class AccountPage extends JPanel {
         newEmailPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         //text field
-        newEmailTextField = new JTextField("Input new email ");
+        newEmailTextField = new JTextField("Input a new email");
         newEmailTextField.setPreferredSize(TEXT_FIELD_DIMENSION);
         MouseAdapter emailMouseAdapter = new MouseAdapter() {
             @Override
@@ -176,7 +185,7 @@ public class AccountPage extends JPanel {
 
     private void changeUsername() {
         String inputUsername = newUsernameTextField.getText();
-        if (!inputUsername.isEmpty() && userController.isNewUser(inputUsername)) {
+        if (!inputUsername.isEmpty() && userController.isNewUser(inputUsername) && !inputUsername.equals("Input a new username")) {
             userController.updateUsername(loggedUser.getUsername(), inputUsername);
             JOptionPane.showMessageDialog(null, "Username " + loggedUser.getUsername()
                     + " was changed to " + inputUsername);
@@ -186,7 +195,7 @@ public class AccountPage extends JPanel {
             AuditController.saveEvent(loggedUser, Audit.USERNAME_CHANGED);
             writeMessage();
             welcomeMessageLabel.setText(welcomeMessage);
-        } else if (inputUsername.isEmpty()) {
+        } else if (inputUsername.isEmpty() || inputUsername.equals("Input a new username")) {
             JOptionPane.showMessageDialog(null, "Please input a username");
             newUsernameTextField.setText("");
             newUsernameTextField.requestFocus();

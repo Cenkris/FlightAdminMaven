@@ -49,13 +49,13 @@ public class LogoutService {
             while (MINUTES.between(lastAction, LocalTime.now()) < waitTime) {
                 try {
                     long timeDifferenceInMinutes = (waitTime - MINUTES.between(lastAction, LocalTime.now())) * 60000;
-                    System.out.println(Instant.now() + ": Waiting for: " + timeDifferenceInMinutes / 60000 + " minutes");
+//                    System.out.println(Instant.now() + ": Waiting for: " + timeDifferenceInMinutes / 60000 + " minutes");
                     Thread.sleep(timeDifferenceInMinutes);
                 } catch (InterruptedException e) {
                     System.exit(0);
                 }
             }
-            System.out.println(Instant.now() + ": Should log out now!");
+//            System.out.println(Instant.now() + ": Should log out now!");
             logout();
 
         };

@@ -10,7 +10,7 @@ public class StartPage extends JFrame {
     private final Dimension BUTTON_DIMENSION = new Dimension(120,50);
 
     public StartPage(){
-        BackButton.addPage(this);
+        BackButton.addComponent(this);
         initLoginButton();
         initRegisterButton();
         initDefaultValues();

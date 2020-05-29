@@ -25,7 +25,7 @@ public class LoginPage extends JFrame {
     private Dimension BUTTON_DIMENSION = new Dimension(90, 20);
 
     public LoginPage() {
-        BackButton.addPage(this);
+        BackButton.addComponent(this);
         initMessage();
         initUsernamePanel();
         initPasswordPanel();

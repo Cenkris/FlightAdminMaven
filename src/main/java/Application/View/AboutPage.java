@@ -21,7 +21,7 @@ public class AboutPage extends JFrame {
         if (instance == null) {
             instance = new AboutPage();
         }
-        BackButton.addPage(instance);
+        BackButton.addComponent(instance);
         return instance;
     }
 

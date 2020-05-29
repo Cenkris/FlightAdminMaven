@@ -23,7 +23,7 @@ public class RegisterPage extends JFrame {
     private final Dimension FIELD_DIMENSIONS = new Dimension(200, 30);
 
     RegisterPage() {
-        BackButton.addPage(this);
+        BackButton.addComponent(this);
         initHelpMessage();
         initUsernamePanel();
         initPasswordPanel();

@@ -27,7 +27,7 @@ public class AccountHistoryPage extends JFrame {
         if (instance == null) {
             instance = new AccountHistoryPage();
         }
-        BackButton.addPage(instance);
+        BackButton.addComponent(instance);
         refreshMessage();
         return instance;
     }
@@ -38,9 +38,16 @@ public class AccountHistoryPage extends JFrame {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("<html>");
-        for (int i = 0; i < numberOfActionsDisplayed; i++) {
-            String message = createMessage(eventList.get(i));
-            stringBuilder.append(message);
+        if (eventList.size() > 10) {
+            for (int i = 0; i < numberOfActionsDisplayed; i++) {
+                String message = createMessage(eventList.get(i));
+                stringBuilder.append(message);
+            }
+        } else {
+            for (AuditEvent event : eventList) {
+                String message = createMessage(event);
+                stringBuilder.append(message);
+            }
         }
         stringBuilder.append("</html>");
 
