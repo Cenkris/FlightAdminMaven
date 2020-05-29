@@ -26,7 +26,6 @@ public class BackButton extends JButton {
             if (currentPanel.isEmpty()) {
                 currentPanel.add(page);
             } else {
-                System.out.println("Added! :" + page);
                 storage.addFirst(currentPanel.pop());
                 currentPanel.addFirst(page);
             }
@@ -34,7 +33,6 @@ public class BackButton extends JButton {
     }
 
     private Component getLastFrame() {
-        System.out.println("Back!");
         return storage.pop();
     }
 

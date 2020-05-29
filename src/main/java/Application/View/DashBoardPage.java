@@ -123,8 +123,8 @@ public class DashBoardPage extends JFrame {
         MouseAdapter onClickChangeTimerMouseAdapter = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                String inputText = JOptionPane.showInputDialog("Input the number of minutes for auto logout function. Default is 15. " +
-                        "\nPlease make it natural number > 0");
+                String inputText = JOptionPane.showInputDialog("Input the number of minutes for auto logout function. Default is 1 minutes for demonstration purposes. " +
+                        "\nPlease make it > 0");
 
                 if (inputText != null) {
                     if (inputText.matches("\\d+")) {
