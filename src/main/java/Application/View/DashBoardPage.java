@@ -109,6 +109,10 @@ public class DashBoardPage extends JFrame {
         MouseAdapter onClickLogOutMouseAdapter = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                Window[] windows = Window.getWindows();
+                for (Window window : windows) {
+                    window.setVisible(false);
+                }
                 LoginPage loginPage = new LoginPage();
                 loginPage.setVisible(true);
                 AuditController.saveEvent(LoggedUser.getLoggedUser(), Audit.LOGOUT);
