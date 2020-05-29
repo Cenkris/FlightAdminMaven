@@ -26,8 +26,12 @@ public class BackButton extends JButton {
             if (currentPanel.isEmpty()) {
                 currentPanel.add(page);
             } else {
-                storage.addFirst(currentPanel.pop());
-                currentPanel.addFirst(page);
+                if (currentPanel.peek() == page) {
+                    currentPanel.pop();
+                } else {
+                    storage.addFirst(currentPanel.pop());
+                    currentPanel.addFirst(page);
+                }
             }
         }
     }
