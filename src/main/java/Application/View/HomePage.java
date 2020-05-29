@@ -28,7 +28,7 @@ public class HomePage extends JPanel {
     private JPanel clockPanel;
     private JTable fligthTable;
     private JButton addFlightButton, deleteFlightButton;
-    private String[] colNames = {"", "Source", "Destination", "Departure hour", "Arrival hour", "Days", "Price"};
+    private final String[] colNames = {"", "Source", "Destination", "Departure hour", "Arrival hour", "Days", "Price"};
     private final int xAxisDimension = 600;
     private DefaultTableModel flightTableModel;
     private final FlightController flightController = new FlightController();
@@ -192,7 +192,7 @@ public class HomePage extends JPanel {
                     revalidate();
                     repaint();
                 }
-            } catch (ArrayIndexOutOfBoundsException e){
+            } catch (ArrayIndexOutOfBoundsException e) {
                 flightTableModel.addRow(row);
                 revalidate();
                 repaint();

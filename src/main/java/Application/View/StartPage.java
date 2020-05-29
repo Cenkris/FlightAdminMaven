@@ -7,9 +7,9 @@ import java.awt.*;
 
 public class StartPage extends JFrame {
     private JButton loginButton, registerButton;
-    private final Dimension BUTTON_DIMENSION = new Dimension(120,50);
+    private final Dimension BUTTON_DIMENSION = new Dimension(120, 50);
 
-    public StartPage(){
+    public StartPage() {
         BackButton.addComponent(this);
         initLoginButton();
         initRegisterButton();
@@ -41,7 +41,7 @@ public class StartPage extends JFrame {
     private void initDefaultValues() {
         setLayout(new FlowLayout());
         setTitle("Start Page");
-        setSize(300,200);
+        setSize(300, 200);
         pack();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -3,9 +3,9 @@ package Application.View;
 import Application.Controller.AuditController;
 import Application.Controller.UserController;
 import Application.Model.Audit;
+import Helper.AccountConstraints;
 import Helper.BackButton;
 import Helper.LoggedUser;
-import Helper.AccountConstraints;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -32,7 +32,7 @@ public class ChangePasswordPage extends JFrame {
         initDefaultValues();
     }
 
-    public static ChangePasswordPage getInstance(){
+    public static ChangePasswordPage getInstance() {
         if (instance == null) {
             instance = new ChangePasswordPage();
         }
