@@ -240,7 +240,7 @@ public class AddFlightPage extends JFrame {
                 JOptionPane.showMessageDialog(null, "Duration field needs to have HH:mm(0-23:00-59) format");
                 durationTextField.requestFocus();
             } else if (!isPricePositiveNumber()) {
-                JOptionPane.showMessageDialog(null, "Price value must be a number more than 0");
+                JOptionPane.showMessageDialog(null, "Price value must be a number more than 0 and less than " + Integer.MAX_VALUE);
                 priceTextField.requestFocus();
             }
         }
@@ -305,7 +305,8 @@ public class AddFlightPage extends JFrame {
                 cityHasMoreThanThreeLetters(destinationTextField.getText()) &&
                 isValidHourFormat(departureHourTextField.getText()) &&
                 isValidHourFormat(durationTextField.getText()) &&
-                isPricePositiveNumber() && !noDaysSelected() && !flightAlreadyExists(sourceTextField.getText(), destinationTextField.getText());
+                isPricePositiveNumber() && !noDaysSelected() &&
+                !flightAlreadyExists(sourceTextField.getText(), destinationTextField.getText());
     }
 
     private boolean isSourceSameAsDestination() {
@@ -322,11 +323,22 @@ public class AddFlightPage extends JFrame {
         String price = priceTextField.getText();
         boolean result = false;
 
-        if (price.matches("^\\d+$")) {
+        if (price.matches("^\\d+$") && numberIsValidInteger()) {
             int intPrice = Integer.parseInt(price);
             if (intPrice > 0) {
                 result = true;
             }
+        }
+        return result;
+    }
+
+    private boolean numberIsValidInteger() {
+        //for string longer than Integer.MAX_VALUE
+        boolean result = true;
+        try {
+            Integer.parseInt(priceTextField.getText());
+        } catch (NumberFormatException e) {
+            result = false;
         }
         return result;
     }
